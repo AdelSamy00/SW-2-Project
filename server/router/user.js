@@ -5,12 +5,6 @@ const User = require('../model/User');
 
 const user = new User();
 router.post('/signup', async function (req, res) {
-  /* const values = [
-    req.body.name,
-    req.body.email,
-    req.body.password,
-    req.body.phone,
-  ]; */
   const data = req.body;
   const result = await user.getUserByEmail(data.email);
   if (result.length > 0) {
