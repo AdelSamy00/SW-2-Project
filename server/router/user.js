@@ -34,16 +34,6 @@ router.post('/login', async (req, res) => {
     //const userId = JSON.parse(JSON.stringify(result))[0].id;
     //console.log(res.setHeader('userid', userId));
   }
-  /*   try {
-    const result = await conn.awaitQuery('select * from users where ? AND ?', [
-      { email: data.password },
-      { password: data.password },
-    ]);
-    res.json(result);
-    console.log(result);
-  } catch (error) {
-    throw error;
-  } */
 });
 
 router.get('/add-book-request/:ISBN', function (req, res) {
