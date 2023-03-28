@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const conn = require('../config/connection');
-const express = require('express');
 const User = require('../model/User');
+const { v4: uuidv4, v4 } = require('uuid');
 
 const user = new User();
 router.post('/signup', async function (req, res) {
@@ -10,8 +10,9 @@ router.post('/signup', async function (req, res) {
   if (result.length > 0) {
     res.status(210).send('this Email address is already reqistered.');
   } else {
-    await user.createUser(req, res);
-    res.status(201);
+    const token = uuidv4();
+    const result = await user.createUser(req, res, token);
+    res.status(201).json({ message: 'signup sccessfully' });
   }
 });
 
@@ -30,15 +31,16 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/add-book-request/:ISBN&:id', async function (req, res) {
-  const { ISBN, id } = req.params;
+router.post('/add-book-request', async function (req, res) {
+  const { id, ISBN } = req.body;
   try {
-    const result = await user.checkIfBorrowed(id, ISBN);
-    if (result.length > 0) {
-      res.status(401).json({ message: 'this request has already send.' });
+    const result = await user.checkIfBorrowed(ISBN);
+    if (result[0].isBorrowed == 1) {
+      res
+        .status(401)
+        .json({ message: 'the book is already Borrowed by another user.' });
     } else {
-      await user.getRequestToBorrow(id, ISBN);
-      res.status(200).json({ message: 'Request send.' });
+      await user.getRequestToBorrow(id, ISBN, res);
     }
   } catch (error) {
     throw error;

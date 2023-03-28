@@ -23,9 +23,9 @@ class Book {
       (err) => {
         if (err) {
           res.statusCode = 400;
-          res.json({ massege: 'failed to save the book' });
+          res.json({ messege: 'failed to save the book' });
         } else {
-          res.json({ massege: 'created succsessfully' });
+          res.json({ messege: 'created succsessfully' });
         }
       }
     );
@@ -41,31 +41,54 @@ class Book {
       throw error;
     }
   }
-  async checkIfBorrowed(userID, bookISBN) {
+  async checkIfBorrowed(bookISBN) {
     try {
-      const result = await conn.awaitQuery(
-        'select * from borrowed where ? and ?',
-        [
-          {
-            user_id: userID,
-          },
-          {
-            book_ISBN: bookISBN,
-          },
-        ]
-      );
+      const result = await conn.awaitQuery('select * from books where ?', {
+        ISBN: bookISBN,
+      });
       return result;
     } catch (error) {
       throw error;
     }
   }
-  async getRequestToBorrow(userID, bookISBN) {
+  async getBookByISBN(ISBN) {
     try {
-      const result = await conn.awaitQuery('insert into borrowed set ?', {
-        user_id: userID,
-        book_ISBN: bookISBN,
-        isBorrowed: 0,
+      const result = await conn.awaitQuery('select * from books where ?', {
+        ISBN: ISBN,
       });
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async handelBorrowedTable(userID, bookISBN) {
+    try {
+      const result = await conn.awaitQuery('select * from borrowed where ?', [
+        { user_id: userID },
+        { book_ISBN: bookISBN },
+      ]);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getRequestToBorrow(userID, bookISBN, res) {
+    try {
+      const exist = await this.handelBorrowedTable(userID, bookISBN);
+      console.log(exist);
+      if (exist.length > 0) {
+        res
+          .status(401)
+          .json({ message: 'you are already send this request.', data: exist });
+      } else {
+        const result = await conn.awaitQuery('insert into borrowed set ?', {
+          user_id: userID,
+          book_ISBN: bookISBN,
+        });
+        res.status(200).json({ message: 'Request send.' });
+      }
     } catch (error) {
       throw error;
     }

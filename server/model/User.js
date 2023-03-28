@@ -22,28 +22,34 @@ class User extends Book {
       throw error;
     }
   }
-  async createUser(req, res) {
+  async createUser(req, res, token) {
     const data = req.body;
-    await conn.query(
-      'insert into users set ?',
-      {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        phone: data.phone,
-      },
-      (err, result) => {
-        if (err) {
-          res.statusCode = 400;
-          res.json({ massege: 'failed to save user' });
-        } else {
-          res.json({
-            massege:
-              'created succsessfully and yo well wait to approve your request',
-          });
+    try {
+      const result = await conn.awaitQuery(
+        'insert into users set ?',
+        {
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          phone: data.phone,
+          token: token,
+        },
+        (err, result) => {
+          if (err) {
+            res.statusCode = 210;
+            res.json({ messege: 'failed to save user' });
+          } else {
+            res.status(200).json({
+              messege:
+                'created succsessfully and yo well wait to approve your request',
+            });
+          }
         }
-      }
-    );
+      );
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
   async userLogin(email, password) {
     try {

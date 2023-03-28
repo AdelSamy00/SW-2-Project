@@ -27,4 +27,19 @@ router.post('/add-new-book', auther, adminAuth, async function (req, res) {
   }
 });
 
+router.get('/book-by-ISBN', async (req, res) => {
+  try {
+    const { ISBN } = req.body;
+    console.log(ISBN);
+    const bookData = await book.getBookByISBN(ISBN);
+    if (bookData.length > 0) {
+      res.status(200).json({ message: 'found', data: bookData });
+    } else {
+      res.status(404).json({ message: 'book is not found.' });
+    }
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
+
 module.exports = router;
