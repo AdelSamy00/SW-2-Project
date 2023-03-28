@@ -4,9 +4,9 @@ const user = new User();
 
 const auth = async (req, res, next) => {
   const token = req.headers.authorization.split(' ')[1];
-  console.log(token);
+  //console.log(token);
   const userID = req.headers.userid;
-  console.log(userID);
+  //console.log(userID);
   if (!token) {
     return res.status(403).json({ message: 'you are not a authorization.' });
   } else if (token) {

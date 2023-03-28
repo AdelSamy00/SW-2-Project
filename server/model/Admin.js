@@ -23,20 +23,34 @@ class Admin extends Book {
       throw error;
     }
   }
+  async getNewUserByID(id) {
+    try {
+      const result = await conn.awaitQuery(
+        'select * from users where ? and ? ',
+        [{ id: id }, { status: 0 }]
+      );
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
 
-  async approveUser(req, res, id) {
-    conn.query(
-      'update users set ? where ?',
-      [{ status: 'active' }, { id: id }],
-      (err, result, fields) => {
-        if (err) {
-          res.statusCode = 500;
-          res.json({ massage: 'samething Wrong.' });
-        } else {
-          res.json({ massage: 'Approve Complate.' });
+  async approveUser(id, limit, res) {
+    try {
+      await conn.awaitQuery(
+        'update users set ? where ?',
+        [{ status: 1, limited_requests: limit }, { id: id }],
+        (err) => {
+          if (err) {
+            return res.status(500);
+          } else {
+            return res.status(200);
+          }
         }
-      }
-    );
+      );
+    } catch (error) {
+      throw error;
+    }
   }
 }
 module.exports = Admin;

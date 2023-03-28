@@ -38,9 +38,15 @@ router.get('/get-new-users', async (req, res) => {
   }
 });
 
-router.put('/get-new-users/:id', (req, res) => {
-  const { id } = req.params;
-  admin.approveUser(req, res, id);
+router.put('/get-new-users', async (req, res) => {
+  const { userID, reqLimit } = req.body;
+  console.log(reqLimit);
+  admin.approveUser(userID, reqLimit, res);
+  if (res.status === 500) {
+    res.json({ message: 'samething Wrong.' });
+  } else {
+    res.json({ massage: 'Approveal completed ' });
+  }
 });
 
 router.put(

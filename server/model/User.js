@@ -57,18 +57,18 @@ class User extends Book {
         'select * from users where ? and ?',
         [{ email: email }, { password: password }]
       );
-      //console.log(result);
       return result;
     } catch (error) {
       throw error;
     }
   }
 
-  async getHistory(id) {
+  async getHistory(userID) {
     try {
-      const result = await conn.awaitQuery('select * from borrowed where ?', {
-        user_id: id,
+      const result = await conn.awaitQuery('select * from history where ?', {
+        user_id: userID,
       });
+      console.log(result);
       return result;
     } catch (error) {
       throw error;

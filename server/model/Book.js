@@ -64,30 +64,53 @@ class Book {
 
   async handelBorrowedTable(userID, bookISBN) {
     try {
-      const result = await conn.awaitQuery('select * from borrowed where ?', [
-        { user_id: userID },
-        { book_ISBN: bookISBN },
-      ]);
+      const result = await conn.awaitQuery(
+        'select * from borrowed where ? and ?',
+        [{ user_id: userID }, { book_ISBN: bookISBN }]
+      );
       return result;
     } catch (error) {
       throw error;
     }
   }
-
+  async getBookTitle(bookISBN) {
+    try {
+      const result = await conn.awaitQuery('select title from books where ?', {
+        ISBN: bookISBN,
+      });
+      return result[0].title;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async setRequstToHistory(userID, bookISBN, bookTitle) {
+    try {
+      await conn.awaitQuery('insert into history set ?', {
+        user_id: userID,
+        book_ISBN: bookISBN,
+        book_title: bookTitle,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
   async getRequestToBorrow(userID, bookISBN, res) {
     try {
+      const bookTitle = await this.getBookTitle(bookISBN);
+      //console.log(bookTitle);
       const exist = await this.handelBorrowedTable(userID, bookISBN);
-      console.log(exist);
-      if (exist.length > 0) {
-        res
-          .status(401)
-          .json({ message: 'you are already send this request.', data: exist });
-      } else {
-        const result = await conn.awaitQuery('insert into borrowed set ?', {
+      //console.log(Object.keys(exist).length);
+      if (Object.keys(exist).length == 0) {
+        await conn.awaitQuery('insert into borrowed set ?', {
           user_id: userID,
           book_ISBN: bookISBN,
         });
+        await this.setRequstToHistory(userID, bookISBN, bookTitle);
         res.status(200).json({ message: 'Request send.' });
+      } else {
+        res
+          .status(401)
+          .json({ message: 'you are already send this request.', data: exist });
       }
     } catch (error) {
       throw error;

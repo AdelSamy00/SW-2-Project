@@ -36,8 +36,7 @@ const Login = () => {
     axios
       .post('http://localhost:4000/login', values)
       .then((res) => {
-        console.log(res);
-        if (res.data.massage === 'login Successfully.') {
+        if (res.data.message === 'login Successfully.') {
           window.localStorage.setItem('id', res.data.userData.id);
           window.localStorage.setItem('email', res.data.userData.email);
           window.localStorage.setItem('token', res.data.userData.token);
@@ -47,8 +46,12 @@ const Login = () => {
         }
       })
       .catch((err) => {
-        alert('please check you email or pasword.');
-        console.log(err);
+        if (err.message === 'Request failed with status code 405') {
+          alert('You cannot login please wait until your approval.');
+        } else {
+          alert('please check you email or pasword.');
+        }
+        //console.log(err.message);
       });
   };
 

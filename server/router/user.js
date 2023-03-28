@@ -19,13 +19,19 @@ router.post('/signup', async function (req, res) {
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   const result = await user.userLogin(email, password);
-  //console.log(result);
-  if (result.length == 0) {
-    res.status(404).json('please check you email or pasword.');
+  console.log(result[0].status);
+  if (result[0].status != 1) {
+    res.status(405).json({
+      message: 'You cannot login new please wait until your approval.',
+    });
+  } else if (result.length == 0) {
+    res.status(404).json({
+      message: 'please check you email or pasword.',
+    });
   } else {
     res
       .status(200)
-      .json({ massage: 'login Successfully.', userData: result[0] });
+      .json({ message: 'login Successfully.', userData: result[0] });
     //const userId = JSON.parse(JSON.stringify(result))[0].id;
     //console.log(res.setHeader('userid', userId));
   }
@@ -35,6 +41,7 @@ router.post('/add-book-request', async function (req, res) {
   const { id, ISBN } = req.body;
   try {
     const result = await user.checkIfBorrowed(ISBN);
+    console.log(result[0].isBorrowed);
     if (result[0].isBorrowed == 1) {
       res
         .status(401)
@@ -47,10 +54,11 @@ router.post('/add-book-request', async function (req, res) {
   }
 });
 
-router.get('/history/:id', async function (req, res) {
-  const { id } = req.params;
+router.get('/history', async function (req, res) {
+  const { userID } = req.body;
+  console.log(userID);
   try {
-    const result = await user.getHistory(id);
+    const result = await user.getHistory(userID);
     res.status(200).json({ message: 'user history', data: result });
   } catch (error) {
     res.status(404).json({ message: error.message });
