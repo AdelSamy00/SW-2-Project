@@ -30,5 +30,45 @@ class Book {
       }
     );
   };
+
+  async getBorrowedBook(bookISBN) {
+    try {
+      const result = await conn.awaitQuery('select * from books where ?', {
+        ISBN: bookISBN,
+      });
+      return result[0];
+    } catch (error) {
+      throw error;
+    }
+  }
+  async checkIfBorrowed(userID, bookISBN) {
+    try {
+      const result = await conn.awaitQuery(
+        'select * from borrowed where ? and ?',
+        [
+          {
+            user_id: userID,
+          },
+          {
+            book_ISBN: bookISBN,
+          },
+        ]
+      );
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getRequestToBorrow(userID, bookISBN) {
+    try {
+      const result = await conn.awaitQuery('insert into borrowed set ?', {
+        user_id: userID,
+        book_ISBN: bookISBN,
+        isBorrowed: 0,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 module.exports = Book;

@@ -30,37 +30,30 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/add-book-request/:ISBN', function (req, res) {
-  const { ISBN } = req.params;
-  result = user.getBorrowedBook(req, res, ISBN);
-});
-router.post('/add-book-request/:ISBN&:id', function (req, res) {
+router.post('/add-book-request/:ISBN&:id', async function (req, res) {
   const { ISBN, id } = req.params;
-  conn.query(
-    'select * from books where ?',
-    { ISBN: ISBN },
-    (err, result, fields) => {
-      if (err) {
-        console.log('err');
-      } else {
-        const data = JSON.parse(JSON.stringify(result))[0];
-        conn.query(
-          'insert into borrowed set ?',
-          { user_id: id, book_ISBN: data.ISBN, isBorrowed: 0 },
-          (err, result) => {
-            if (err) {
-              res.statusCode = 400;
-              res.json({ massage: 'samething Wrong.' });
-            } else {
-              res.json({
-                massage: 'request send and you will wait until approve it.',
-              });
-            }
-          }
-        );
-      }
+  try {
+    const result = await user.checkIfBorrowed(id, ISBN);
+    if (result.length > 0) {
+      res.status(401).json({ message: 'this request has already send.' });
+    } else {
+      await user.getRequestToBorrow(id, ISBN);
+      res.status(200).json({ message: 'Request send.' });
     }
-  );
+  } catch (error) {
+    throw error;
+  }
+});
+
+router.get('/history/:id', async function (req, res) {
+  const { id } = req.params;
+  try {
+    const result = await user.getHistory(id);
+    res.status(200).json({ message: 'user history', data: result });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+    throw error;
+  }
 });
 
 module.exports = router;

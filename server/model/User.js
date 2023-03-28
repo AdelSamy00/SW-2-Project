@@ -12,6 +12,16 @@ class User extends Book {
       throw error;
     }
   }
+  async getUserByID(id) {
+    try {
+      const result = await conn.awaitQuery('select * from users where ?', {
+        id: id,
+      });
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
   async createUser(req, res) {
     const data = req.body;
     await conn.query(
@@ -47,21 +57,16 @@ class User extends Book {
       throw error;
     }
   }
-  getBorrowedBook(req, res, bookISBN) {
-    conn.query(
-      'select * from books where ?',
-      { ISBN: bookISBN },
-      (err, result, fields) => {
-        if (err) {
-          console.log('err');
-        } else {
-          const data = JSON.parse(JSON.stringify(result));
-          res.json(result);
-          return data[0];
-        }
-      }
-    );
+
+  async getHistory(id) {
+    try {
+      const result = await conn.awaitQuery('select * from borrowed where ?', {
+        user_id: id,
+      });
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
-  borrowedRequest(req, res, userID, bookISBN) {}
 }
 module.exports = User;

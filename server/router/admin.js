@@ -28,7 +28,7 @@ router.get('/get-new-users', async (req, res) => {
   const allUsers = await admin.getNewUsers();
   if (allUsers.length == 0) {
     res.status(404).json({
-      message: 'ther are no were any new users.',
+      message: 'ther are no new users waiting for approval.',
     });
   } else {
     console.log(allUsers[0]);
