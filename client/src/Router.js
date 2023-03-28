@@ -1,10 +1,18 @@
+import Home from "./pages/home/Home";
+
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <App />,
+    childeren: [
+      {
+        path: "/home",
+        element: <Home />,
+      },
+    ],
   },
   {
-    path: '*',
+    path: "*",
     element: <NotFound />,
   },
 ]);

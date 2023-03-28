@@ -1,7 +1,7 @@
-import Login from './pages/login/Login.js';
-import Signup from './pages/signup/Signup.js';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './pages/home/Home.js';
+import Login from "./pages/login/Login.js";
+import Signup from "./pages/signup/Signup.js";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/home/Home.js";
 function App() {
   return (
     <BrowserRouter>

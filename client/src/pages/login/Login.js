@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import './Login.css';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import "./Login.css";
 //import Validation from './LoginValidation';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const showPassword = () => {
-    const x = document.getElementById('password');
-    if (x.type === 'password') {
-      x.type = 'text';
+    const x = document.getElementById("password");
+    if (x.type === "password") {
+      x.type = "text";
     } else {
-      x.type = 'password';
+      x.type = "password";
     }
   };
 
   const navigate = useNavigate();
   const [values, setValues] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   //  const [errors, setErrors] = useState({});
@@ -34,17 +34,17 @@ const Login = () => {
     //setErrors(Validation(values));
     //console.log(values);
     axios
-      .post('http://localhost:4000/login', values)
+      .post("http://localhost:4000/login", values)
       .then((res) => {
         console.log(res);
-        if (res.data.massage === 'login Successfully.') {
-          window.localStorage.setItem('key', res.data.userData.id);
-          navigate('/home');
+        if (res.data.massage === "login Successfully.") {
+          window.localStorage.setItem("key", res.data.userData.id);
+          navigate("/home");
           //navigate(`/home/${res.data.userData.id}`);
         }
       })
       .catch((err) => {
-        alert('please check you email or pasword.');
+        alert("please check you email or pasword.");
         console.log(err);
       });
   };
@@ -72,7 +72,7 @@ const Login = () => {
           onChange={handleInput}
           required
         />
-        <div className="form--marketing" style={{ alignSelf: 'baseline' }}>
+        <div className="form--marketing" style={{ alignSelf: "baseline" }}>
           <input id="okayToEmail" type="checkbox" onClick={showPassword} />
           <label htmlFor="okayToEmail" className="checkbox">
             show password
