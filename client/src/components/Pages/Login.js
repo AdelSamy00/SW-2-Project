@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './Login.css';
+import '../Style/Login.css';
 //import Validation from './LoginValidation';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -56,7 +56,7 @@ const Login = () => {
   };
 
   return (
-    <div className="container ">
+    <div className="loginContainer ">
       <form className="form" onSubmit={handleSubmit}>
         <span className="login">Login</span>
         <input
