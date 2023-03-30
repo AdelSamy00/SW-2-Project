@@ -43,7 +43,7 @@ router.get('/', async function (req, res) {
 
 router.post('/add-new-book', upload.single('photo'), async function (req, res) {
   //console.log(req.body.ISBN);
-  /*   try {
+  try {
     const bookData = req.body;
     const imgName = req.file.path;
     console.log(imgName);
@@ -51,7 +51,7 @@ router.post('/add-new-book', upload.single('photo'), async function (req, res) {
   } catch (error) {
     console.log(error);
     throw error;
-  } */
+  }
 });
 
 router.get('/book-by-ISBN', async (req, res) => {
