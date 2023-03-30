@@ -1,6 +1,8 @@
-import Footer from "../../shared/Pages/Footer";
-import Header from "../../shared/Pages/Header";
-import "../Style/Contact.css";
+
+import Footer from "../../../shared/Pages/Footer";
+import Header from "../../../shared/Pages/Header";
+import "../../Style/Contact.css";
+
 const Contact = () => {
   return (
     <>
