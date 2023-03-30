@@ -1,6 +1,6 @@
-import Footer from "../../shared/Pages/Footer";
-import Header from "../../shared/Pages/Header";
-import '../Style/BorrowedHistory.css';
+import Footer from "../../../shared/Pages/Footer.js";
+import Header from "../../../shared/Pages/Header.js";
+import "../../Style/BorrowedHistory.css";
 
 const BorrowedHistory = () => {
   return (

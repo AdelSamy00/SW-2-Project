@@ -1,5 +1,5 @@
-import Footer from "../../shared/Pages/Footer";
-import Header from "../../shared/Pages/Header";
+import Footer from "../../../shared/Pages/Footer.js";
+import Header from "../../../shared/Pages/Header.js";
 
 
 const Services = () => {
