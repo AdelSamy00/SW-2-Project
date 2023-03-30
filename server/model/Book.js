@@ -10,7 +10,7 @@ class Book {
     }
   };
 
-  addNewBook = (data, res) => {
+  addNewBook = (data, imgName, res) => {
     conn.query(
       'insert into books set ?',
       {
@@ -19,6 +19,7 @@ class Book {
         author: data.author,
         subject: data.subject,
         rackNumber: data.rackNumber,
+        img_url: imgName,
       },
       (err) => {
         if (err) {
