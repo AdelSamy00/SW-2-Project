@@ -1,22 +1,48 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import Header from "../../../shared/Pages/Header.js";
 
 const AddBook = () => {
   return (
     <>
       <Header />
-      <div>AddBook</div>
       <div className="container mt-3">
-        <h1>Upload Your Img Here</h1>
-
-        <Form>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>UserName</Form.Label>
-            <Form.Control type="text" name="fname" /* onChange={setdata}  */ />
+        <h1>Upload Book</h1>
+              <Form>
+                  
+          <Form.Group className="mb-3" controlId="formBasicAutorName">
+            <Form.Label>Author</Form.Label>
+            <Form.Control type="text" name="author" /* onChange={setdata}  */ />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicTitle">
+            <Form.Label>Title</Form.Label>
+            <Form.Control type="text" name="title" /* onChange={setdata}  */ />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicISBN">
+            <Form.Label>ISBN</Form.Label>
+            <Form.Control type="namber" name="ISBN" /* onChange={setdata}  */ />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicRackNumber">
+            <Form.Label>Rack Number</Form.Label>
+            <Form.Control
+              type="text"
+              name="rackNumber" /* onChange={setdata}  */
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicSubject">
+            <Form.Label>Subject</Form.Label>
+            <Form.Control
+              type="text"
+              name="subject" /* onChange={setdata}  */
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicDescription">
+            <Form.Label>Description</Form.Label>
+            <Form.Control
+              type="text"
+              name="description" /* onChange={setdata}  */
+            />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -26,7 +52,11 @@ const AddBook = () => {
               name="photo" /*  onChange={setimgfile} */
             />
           </Form.Group>
-          <Button variant="primary" type="submit" /*  onClick={addUserData} */>
+          <Button
+            variant="primary"
+            type="submit"
+            className="mb-5" /*  onClick={addUserData} */
+          >
             Submit
           </Button>
         </Form>
