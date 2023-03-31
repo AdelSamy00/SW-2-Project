@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import AdminHeader from "../../../shared/Pages/AdminHeader.js";
 import Header from "../../../shared/Pages/Header.js";
 
 const AddBook = () => {
   return (
     <>
-      <Header />
+      <AdminHeader />
       <div className="container mt-3">
         <h1>Upload Book</h1>
               <Form>

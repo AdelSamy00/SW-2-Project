@@ -5,18 +5,28 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { NavLink } from "react-router-dom";
 
-const AcceptUser = () => {
+const ManageBooks = () => {
   return (
     <>
       <AdminHeader />
       <div className="container mt-2">
-        <h1 className="text-center mt-2 mb-5">Manage Users Acconts</h1>
-        <div className="d-flex justify-content-between align-content-start flex-wrap m-3 ">
+        <h1 className="text-center mt-2">Manage Books</h1>
+        <div className="text-end">
+          <Button variant="primary">
+            <NavLink
+              to="/admin/add-book"
+              className="text-decoration-none text-light"
+            >
+              Add Book
+            </NavLink>
+          </Button>
+        </div>
+        <div className="d-flex justify-content-between align-content-start flex-wrap m-3">
           {/* {data.length > 0
             ? data.map((el, i) => {
                 return (
                   <> */}
-          <Card style={{ width: "22rem", height: "25rem" }} className="mb-3">
+          <Card style={{ width: "33rem", height: "45rem" }} className="mb-3">
             <Card.Img
               variant="top"
               src={
@@ -24,35 +34,42 @@ const AcceptUser = () => {
               }
               /* src={`/uploads/${el.userimg}`} */
               style={{
-                width: "100px",
+                width: "150px",
                 textAlign: "center",
                 margin: "auto",
               }}
               className="mt-2"
             />
             <Card.Body /* className="text-center" */>
-              <Card.Title>Name :{/*  {el.username} */}</Card.Title>
+              <Card.Title>Title :{/*  {el.username} */}</Card.Title>
               <Card.Text>
-                Email :{/*  {moment(el.date).format("DD-MM-YYYY")} */}
+                Author :{/*  {moment(el.date).format("DD-MM-YYYY")} */}
               </Card.Text>
               <Card.Text>
-                Phone :{/*  {moment(el.date).format("DD-MM-YYYY")} */}
+                ISPN :{/*  {moment(el.date).format("DD-MM-YYYY")} */}
               </Card.Text>
-
+              <Card.Text>
+                Subject :{/*  {moment(el.date).format("DD-MM-YYYY")} */}
+              </Card.Text>
+              <Card.Text>
+                Description :{/*  {moment(el.date).format("DD-MM-YYYY")} */}
+              </Card.Text>
+              <Card.Text>
+                Rack Number :{/*  {moment(el.date).format("DD-MM-YYYY")} */}
+              </Card.Text>
               <div className="d-flex justify-content-around text-center">
                 <Button
-                  variant="success"
-                  size ="lg"
-                  /*  onClick={() => dltUser(el.id)} */
+                  variant="secondary"
+                  size="lg" /*  onClick={() => dltUser(el.id)} */
                 >
-                  Accept
+                  Update
                 </Button>
                 <Button
                   variant="danger"
                   size="lg"
                   /*  onClick={() => dltUser(el.id)} */
                 >
-                  Reject
+                  Delete
                 </Button>
               </div>
             </Card.Body>
@@ -67,4 +84,4 @@ const AcceptUser = () => {
   );
 };
 
-export default AcceptUser;
+export default ManageBooks;
