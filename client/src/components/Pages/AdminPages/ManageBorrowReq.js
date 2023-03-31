@@ -1,9 +1,7 @@
-import "../../Style/Books.css";
 import React from "react";
 import AdminHeader from "../../../shared/Pages/AdminHeader.js";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { NavLink } from "react-router-dom";
 
 const ManageBorrowedReq = () => {
   return (

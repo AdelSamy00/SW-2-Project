@@ -22,25 +22,22 @@ const AdminHeader = () => {
                 >
                   <ul className="navbar-nav ml-auto py-4 py-md-0">
                     <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
-                      <Link to="/admin/manage-books" className="nav-link">
+                      <Link to="/admin/book/manage" className="nav-link">
                         Books
                       </Link>
                     </li>
                     <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
-                      <Link
-                        to="/admin/manage-borrowed-request"
-                        className="nav-link"
-                      >
+                      <Link to="/admin/borrowed/request" className="nav-link">
                         Borrow Requests
                       </Link>
                     </li>
                     <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
-                      <Link to="/admin/accept-users" className="nav-link">
+                      <Link to="/admin/users/accept" className="nav-link">
                         Users Acconts
                       </Link>
                     </li>
                     <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
-                      <Link to="/admin/add-book" className="nav-link">
+                      <Link to="/admin/book/add" className="nav-link">
                         Add Book
                       </Link>
                     </li>

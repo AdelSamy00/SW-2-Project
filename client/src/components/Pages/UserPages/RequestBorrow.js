@@ -4,19 +4,16 @@ import "../../Style/Contact.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
-const Contact = () => {
+
+const Borrowed = () => {
   return (
     <>
       <Header />
       <div id="contact" className="contact-area section-padding">
         <div className="container">
-          <div className="section-title text-center">
-            <h1>Get in Touch</h1>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-              vitae risus nec dui venenatis dignissim. Aenean vitae metus in
-              augue pretium ultrices.
-            </p>
+          <div className="section-title text-center m-4">
+            <h1>Borrow Request</h1>
+
           </div>
           <div className="row">
             <div className="col-lg-7">
@@ -29,13 +26,15 @@ const Contact = () => {
                     <Form.Control type="email" placeholder="Email" />
                   </Form.Group>
                   <Form.Group className="mb-3 " controlId="formBasicPassword">
-                    <Form.Control type="text" placeholder="Subject" />
+                    <Form.Control type="number" placeholder="Phone" />
                   </Form.Group>
                   <Form.Group className="mb-3 " controlId="formBasicPassword">
-                    <InputGroup>
-                      <Form.Control as="textarea" placeholder="Your Message" />
-                    </InputGroup>
+                    <Form.Control type="text" placeholder="Book Title" />
                   </Form.Group>
+                  <Form.Group className="mb-3 " controlId="formBasicPassword">
+                    <Form.Control type="number" placeholder="Book ISBN" />
+                  </Form.Group>
+                  
                   <Button
                     variant="primary"
                     type="submit"
@@ -76,4 +75,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default Borrowed;

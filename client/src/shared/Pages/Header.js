@@ -31,25 +31,26 @@ const Header = () => {
                       </Link>
                     </li>
                     <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
-                      <Link to="/borrowed" className="nav-link">
-                        Borrowed
-                      </Link>
-                    </li>
-                    <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
                       <Link to="/services" className="nav-link">
                         Services
                       </Link>
                     </li>
                     <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
-                      <Link to="/borrowed-history" className="nav-link">
+                      <Link to="/borrow/request" className="nav-link">
+                        Request Borrow
+                      </Link>
+                    </li>
+                    <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
+                      <Link to="/borrowed/history" className="nav-link">
                         Borrowed History
                       </Link>
                     </li>
                     <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
                       <Link to="/contact" className="nav-link">
-                        Contact
+                        Contact Us
                       </Link>
                     </li>
+
                     <li className="pl-4 pl-md-0 ml-0 ml-md-4">
                       <Link to="/" className="nav-link">
                         <Button variant="outline-dark">Logout</Button>

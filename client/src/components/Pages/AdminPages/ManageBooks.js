@@ -1,4 +1,4 @@
-import "../../Style/Books.css";
+
 import React from "react";
 import AdminHeader from "../../../shared/Pages/AdminHeader.js";
 import Button from "react-bootstrap/Button";
@@ -14,7 +14,7 @@ const ManageBooks = () => {
         <div className="text-end">
           <Button variant="primary">
             <NavLink
-              to="/admin/add-book"
+              to="/admin/book/add"
               className="text-decoration-none text-light"
             >
               Add Book
