@@ -18,6 +18,7 @@ const auther = require('./middlewares/auther');
 app.use('/admin', auther, adminAuth, admin);
 app.use('/', user);
 app.use('/book', book);
+app.use('/uploads', express.static('./uploads'));
 
 app.listen(4000, 'localhost', () => {
   console.log('Server Is Runing');

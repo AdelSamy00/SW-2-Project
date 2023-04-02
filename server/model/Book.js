@@ -1,16 +1,17 @@
 const conn = require('../config/connection');
 
 class Book {
-  getAllBooks = () => {
+  async getAllBooks() {
     try {
-      const books = conn.awaitQuery('select * from books');
+      const books = await conn.awaitQuery('select * from books');
       return books;
     } catch (error) {
       throw error;
     }
-  };
+  }
 
   addNewBook = (data, imgName, res) => {
+    imgName = imgName.replaceAll('\\', '/');
     conn.query(
       'insert into books set ?',
       {
@@ -19,6 +20,7 @@ class Book {
         author: data.author,
         subject: data.subject,
         rackNumber: data.rackNumber,
+        description: data.description,
         img_url: imgName,
       },
       (err) => {
@@ -26,7 +28,7 @@ class Book {
           res.statusCode = 400;
           res.json({ messege: 'failed to save the book' });
         } else {
-          res.json({ messege: 'created succsessfully' });
+          res.json({ status: 201, messege: 'created succsessfully' });
         }
       }
     );

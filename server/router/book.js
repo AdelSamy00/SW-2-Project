@@ -4,12 +4,24 @@ const adminAuth = require('../middlewares/admin');
 const auther = require('../middlewares/auther');
 const Book = require('../model/Book');
 const multer = require('multer');
-
+const path = require('path');
+const { fileURLToPath } = require('url');
+//const dirname = path.dirname(fileURLToPath(import.meta.url));
+const uploadPath = path.join(
+  __dirname,
+  '..',
+  '..',
+  'client',
+  'public',
+  'uploads',
+  '/'
+);
+console.log(uploadPath);
 const book = new Book();
 //img storage confing
 let imgConfig = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, './uploads');
+    callback(null, uploadPath);
   },
   filename: (req, file, callback) => {
     callback(null, `image-${Date.now()}.${file.originalname}`);
@@ -36,18 +48,20 @@ router.get('/', async function (req, res) {
     res.status(404).json({ message: 'Not found any books!' });
   } else {
     res
-      .status(200)
+      .status(201)
       .json({ message: 'Get all books successfully.', data: books });
   }
 });
 
 router.post('/add-new-book', upload.single('photo'), async function (req, res) {
-  //console.log(req.body.ISBN);
+  //console.log(req.body.description);
   try {
     const bookData = req.body;
-    const imgName = req.file.path;
-    console.log(imgName);
-    await book.addNewBook(bookData, imgName, res);
+    let imgName = req.file;
+    //console.log(imgName);
+    //console.log(req.file);
+    const filePath = '/uploads/' + imgName.filename;
+    await book.addNewBook(bookData, filePath, res);
   } catch (error) {
     console.log(error);
     throw error;
