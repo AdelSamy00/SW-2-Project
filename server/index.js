@@ -14,8 +14,8 @@ const user = require('./router/user');
 const book = require('./router/book');
 const adminAuth = require('./middlewares/admin');
 const auther = require('./middlewares/auther');
-
-app.use('/admin', auther, adminAuth, admin);
+// auther, adminAuth,
+app.use('/admin', admin);
 app.use('/', user);
 app.use('/book', book);
 app.use('/uploads', express.static('./uploads'));

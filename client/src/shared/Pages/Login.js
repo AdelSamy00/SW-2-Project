@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const localStorage = window.localStorage;
   const showPassword = () => {
     const x = document.getElementById('password');
     if (x.type === 'password') {
@@ -37,11 +38,15 @@ const Login = () => {
       .post('http://localhost:4000/login', values)
       .then((res) => {
         if (res.data.message === 'login Successfully.') {
-          window.localStorage.setItem('id', res.data.userData.id);
-          window.localStorage.setItem('email', res.data.userData.email);
-          window.localStorage.setItem('token', res.data.userData.token);
-          window.localStorage.setItem('type', res.data.userData.type);
-          navigate('/home');
+          localStorage.setItem('id', res.data.userData.id);
+          localStorage.setItem('email', res.data.userData.email);
+          localStorage.setItem('token', res.data.userData.token);
+          localStorage.setItem('type', res.data.userData.type);
+          if (res.data.userData.type == 1) {
+            navigate('/admin/book/manage');
+          } else {
+            navigate('/home');
+          }
           //navigate(`/home/${res.data.userData.id}`);
         }
       })

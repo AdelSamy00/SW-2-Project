@@ -1,66 +1,146 @@
-
-import React from "react";
-import AdminHeader from "../../../shared/Pages/AdminHeader.js";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import AdminHeader from '../../../shared/Pages/AdminHeader.js';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Form from 'react-bootstrap/Form';
+import { Link, NavLink } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import Alert from 'react-bootstrap/Alert';
 
 const AcceptUser = () => {
+  const navigate = useNavigate();
+  const [show, setShow] = useState(false);
+  const [data, setData] = useState([]);
+  const [limits, setLimits] = useState([]);
+  const getNewUsers = async () => {
+    const res = await axios.get('http://localhost:4000/admin/get-new-users', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (res.data.message == 'get all users successfully.') {
+      console.log('data get');
+      console.log(res);
+      setData(res.data.allData);
+    } else {
+      console.log('error');
+    }
+  };
+  const approval = async (userID) => {
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    const res = await axios.put(
+      `http://localhost:4000/admin/get-new-users/${userID}&${limits.limits}`
+    );
+    console.log(res.status);
+    if (res.status == 200) {
+      alert('Added Successfuly.');
+      navigate('/admin/book/manage');
+    } else {
+      alert('Something Wrong.');
+    }
+    console.log(res);
+  };
+  const rejectUser = async (id) => {
+    console.log(id);
+    const res = await axios.delete(
+      `http://localhost:4000/admin/reject-user/${id}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    console.log(res);
+    if (res.status == 202) {
+      getNewUsers();
+      setShow(true);
+    } else {
+      console.log('error');
+    }
+  };
+  useEffect(() => {
+    if (!localStorage.getItem('token')) {
+      navigate('/');
+    } else {
+      getNewUsers();
+    }
+  }, []);
+
+  //console.log(limits);
   return (
     <>
+      {show ? (
+        <Alert variant="danger" onClose={() => setShow(false)} dismissible>
+          Book Delete
+        </Alert>
+      ) : (
+        ''
+      )}
       <AdminHeader />
       <div className="container mt-2">
         <h1 className="text-center mt-2 mb-5">Manage Users Acconts</h1>
         <div className="d-flex justify-content-between align-content-start flex-wrap m-3 ">
-          {/* {data.length > 0
+          {data.length > 0
             ? data.map((el, i) => {
                 return (
-                  <> */}
-          <Card style={{ width: "22rem", height: "25rem" }} className="mb-3">
-            <Card.Img
-              variant="top"
-              src={
-                "https://images.unsplash.com/photo-1566275529824-cca6d008f3da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80"
-              }
-              /* src={`/uploads/${el.userimg}`} */
-              style={{
-                width: "100px",
-                textAlign: "center",
-                margin: "auto",
-              }}
-              className="mt-2"
-            />
-            <Card.Body /* className="text-center" */>
-              <Card.Title>Name :{/*  {el.username} */}</Card.Title>
-              <Card.Text>
-                Email :{/*  {moment(el.date).format("DD-MM-YYYY")} */}
-              </Card.Text>
-              <Card.Text>
-                Phone :{/*  {moment(el.date).format("DD-MM-YYYY")} */}
-              </Card.Text>
-
-              <div className="d-flex justify-content-around text-center">
-                <Button
-                  variant="success"
-                  size ="lg"
-                  /*  onClick={() => dltUser(el.id)} */
-                >
-                  Accept
-                </Button>
-                <Button
-                  variant="danger"
-                  size="lg"
-                  /*  onClick={() => dltUser(el.id)} */
-                >
-                  Reject
-                </Button>
-              </div>
-            </Card.Body>
-          </Card>
-          {/*</> 
+                  <>
+                    <Card
+                      style={{ width: '22rem', height: '25rem' }}
+                      className="mb-3"
+                    >
+                      <Card.Body /* className="text-center" */>
+                        <Card.Title>Name : {el.name}</Card.Title>
+                        <Card.Text>Email :{el.email}</Card.Text>
+                        <Card.Text>Phone :{el.phone}</Card.Text>
+                        <Card.Text>
+                          <Form.Group
+                            className="mb-3"
+                            controlId="formBasicDescription"
+                          >
+                            <Form.Label>Limits</Form.Label>
+                            <Form.Control
+                              type="text"
+                              name="limits"
+                              required
+                              onChange={(e) => {
+                                setLimits({
+                                  ...limits,
+                                  limits: e.target.value,
+                                });
+                              }}
+                            />
+                          </Form.Group>
+                        </Card.Text>
+                        <div className="d-flex justify-content-around text-center">
+                          <Button
+                            variant="success"
+                            size="lg"
+                            onClick={() => {
+                              approval(el.id);
+                              //console.log(el.id);
+                            }}
+                          >
+                            Accept
+                          </Button>
+                          <Button
+                            variant="danger"
+                            size="lg"
+                            onClick={() => rejectUser(el.id)}
+                          >
+                            Reject
+                          </Button>
+                        </div>
+                      </Card.Body>
+                    </Card>
+                  </>
                 );
               })
-            : ""} */}
+            : ''}
         </div>
       </div>
     </>

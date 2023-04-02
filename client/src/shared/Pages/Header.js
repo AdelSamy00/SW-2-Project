@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-import "../style/Header.css";
-import Button from "react-bootstrap/Button";
+import { Link } from 'react-router-dom';
+import '../style/Header.css';
+import Button from 'react-bootstrap/Button';
 const Header = () => {
   return (
     <>
@@ -53,7 +53,15 @@ const Header = () => {
 
                     <li className="pl-4 pl-md-0 ml-0 ml-md-4">
                       <Link to="/" className="nav-link">
-                        <Button variant="outline-dark">Logout</Button>
+                        <Button
+                          variant="outline-dark"
+                          onClick={() => {
+                            console.log(window.localStorage);
+                            window.localStorage.clear();
+                          }}
+                        >
+                          Logout
+                        </Button>
                       </Link>
                     </li>
                   </ul>

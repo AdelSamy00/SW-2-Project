@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { log } = require('console');
 const conn = require('../config/connection');
 const adminAuth = require('../middlewares/admin');
 const auther = require('../middlewares/auther');
@@ -63,16 +64,17 @@ router.post('/add-new-book', upload.single('photo'), async function (req, res) {
     const filePath = '/uploads/' + imgName.filename;
     await book.addNewBook(bookData, filePath, res);
   } catch (error) {
-    console.log(error);
+    res.status(204).json({ message: error.message });
     throw error;
   }
 });
 
-router.get('/book-by-ISBN', async (req, res) => {
+router.get('/book-by-ISBN/:ISBN', async (req, res) => {
   try {
-    const { ISBN } = req.body;
-    console.log(ISBN);
+    const { ISBN } = req.params;
+    //console.log(ISBN);
     const bookData = await book.getBookByISBN(ISBN);
+    //console.log(bookData);
     if (bookData.length > 0) {
       res.status(200).json({ message: 'found', data: bookData });
     } else {

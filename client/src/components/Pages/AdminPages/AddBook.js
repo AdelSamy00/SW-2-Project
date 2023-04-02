@@ -54,7 +54,7 @@ const AddBook = () => {
     }
     console.log(res);
   };
-
+  //console.log(values);
   return (
     <>
       <AdminHeader />
@@ -63,15 +63,30 @@ const AddBook = () => {
         <Form>
           <Form.Group className="mb-3" controlId="formBasicAutorName">
             <Form.Label>Author</Form.Label>
-            <Form.Control type="text" name="author" onChange={handleInput} />
+            <Form.Control
+              type="text"
+              name="author"
+              onChange={handleInput}
+              required="true"
+            />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicTitle">
             <Form.Label>Title</Form.Label>
-            <Form.Control type="text" name="title" onChange={handleInput} />
+            <Form.Control
+              type="text"
+              name="title"
+              onChange={handleInput}
+              required
+            />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicISBN">
             <Form.Label>ISBN</Form.Label>
-            <Form.Control type="namber" name="ISBN" onChange={handleInput} />
+            <Form.Control
+              type="namber"
+              name="ISBN"
+              onChange={handleInput}
+              required
+            />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicRackNumber">
             <Form.Label>Rack Number</Form.Label>
@@ -79,11 +94,17 @@ const AddBook = () => {
               type="text"
               name="rackNumber"
               onChange={handleInput}
+              required
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicSubject">
             <Form.Label>Subject</Form.Label>
-            <Form.Control type="text" name="subject" onChange={handleInput} />
+            <Form.Control
+              type="text"
+              name="subject"
+              onChange={handleInput}
+              required
+            />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicDescription">
             <Form.Label>Description</Form.Label>
@@ -91,12 +112,18 @@ const AddBook = () => {
               type="text"
               name="description"
               onChange={handleInput}
+              required
             />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicFile">
             <Form.Label>Select Your Image</Form.Label>
-            <Form.Control type="file" name="photo" onChange={setfile} />
+            <Form.Control
+              type="file"
+              name="photo"
+              onChange={setfile}
+              required
+            />
           </Form.Group>
           <Button
             variant="primary"

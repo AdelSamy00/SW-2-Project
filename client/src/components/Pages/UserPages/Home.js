@@ -1,14 +1,20 @@
-import React from "react";
-import Footer from "../../../shared/Pages/Footer.js";
-import Header from "../../../shared/Pages/Header.js";
-import "../../Style/Home.css";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import Carousel from "react-bootstrap/Carousel";
-import Card from "react-bootstrap/Card";
-import { Link } from "react-router-dom";
+import React, { useEffect } from 'react';
+import Footer from '../../../shared/Pages/Footer.js';
+import Header from '../../../shared/Pages/Header.js';
+import '../../Style/Home.css';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Carousel from 'react-bootstrap/Carousel';
+import Card from 'react-bootstrap/Card';
+import { Link, useNavigate } from 'react-router-dom';
 const Home = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!localStorage.getItem('token')) {
+      navigate('/');
+    }
+  }, []);
   return (
     <>
       <Header />
@@ -20,17 +26,17 @@ const Home = () => {
             ? data.map((el, i) => {
                 return (
                   <> */}
-          <Card style={{ width: "33rem", height: "45rem" }} className="mb-3">
+          <Card style={{ width: '33rem', height: '45rem' }} className="mb-3">
             <Card.Img
               variant="top"
               src={
-                "https://images.unsplash.com/photo-1566275529824-cca6d008f3da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80"
+                'https://images.unsplash.com/photo-1566275529824-cca6d008f3da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80'
               }
               /* src={`/uploads/${el.userimg}`} */
               style={{
-                width: "150px",
-                textAlign: "center",
-                margin: "auto",
+                width: '150px',
+                textAlign: 'center',
+                margin: 'auto',
               }}
               className="mt-2"
             />
@@ -83,7 +89,7 @@ const Home = () => {
       <Carousel fade>
         <Carousel.Item>
           <img
-            style={{ width: "100%", height: "37rem" }}
+            style={{ width: '100%', height: '37rem' }}
             className="d-block w-100"
             src="https://images.unsplash.com/photo-1566275529824-cca6d008f3da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80"
             alt="First slide"
@@ -95,7 +101,7 @@ const Home = () => {
         </Carousel.Item>
         <Carousel.Item>
           <img
-            style={{ width: "100%", height: "37rem" }}
+            style={{ width: '100%', height: '37rem' }}
             className="d-block w-100"
             src="https://images.unsplash.com/photo-1566275529824-cca6d008f3da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80"
             alt="Second slide"
@@ -108,7 +114,7 @@ const Home = () => {
         </Carousel.Item>
         <Carousel.Item>
           <img
-            style={{ width: "100%", height: "37rem" }}
+            style={{ width: '100%', height: '37rem' }}
             className="d-block w-100"
             src="https://images.unsplash.com/photo-1566275529824-cca6d008f3da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80"
             alt="Third slide"
@@ -129,17 +135,17 @@ const Home = () => {
             ? data.map((el, i) => {
                 return (
                   <> */}
-          <Card style={{ width: "33rem", height: "30em" }} className="mb-3">
+          <Card style={{ width: '33rem', height: '30em' }} className="mb-3">
             <Card.Img
               variant="top"
               src={
-                "https://images.unsplash.com/photo-1566275529824-cca6d008f3da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80"
+                'https://images.unsplash.com/photo-1566275529824-cca6d008f3da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80'
               }
               /* src={`/uploads/${el.userimg}`} */
               style={{
-                width: "150px",
-                textAlign: "center",
-                margin: "auto",
+                width: '150px',
+                textAlign: 'center',
+                margin: 'auto',
               }}
               className="mt-2"
             />

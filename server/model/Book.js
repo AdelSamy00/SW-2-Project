@@ -12,9 +12,8 @@ class Book {
 
   addNewBook = (data, imgName, res) => {
     imgName = imgName.replaceAll('\\', '/');
-    conn.query(
-      'insert into books set ?',
-      {
+    try {
+      conn.query('insert into books set ?', {
         ISBN: data.ISBN,
         title: data.title,
         author: data.author,
@@ -22,16 +21,12 @@ class Book {
         rackNumber: data.rackNumber,
         description: data.description,
         img_url: imgName,
-      },
-      (err) => {
-        if (err) {
-          res.statusCode = 400;
-          res.json({ messege: 'failed to save the book' });
-        } else {
-          res.json({ status: 201, messege: 'created succsessfully' });
-        }
-      }
-    );
+      });
+      res.json({ status: 201, messege: 'created succsessfully' });
+    } catch (error) {
+      res.status(204).json({ messege: 'failed to save the book' });
+      throw error;
+    }
   };
 
   async getBorrowedBook(bookISBN) {
