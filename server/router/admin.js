@@ -39,6 +39,20 @@ router.put('/get-new-users/:userID&:reqLimit', async (req, res) => {
   }
 });
 
+router.get('/all-borrowed-request', async (req, res) => {
+  const allRequest = await admin.getAllBorrowedRequest();
+  //console.log(allRequest);
+  if (allRequest.length == 0) {
+    res
+      .status(200)
+      .json({ message: 'there not found any requests.', data: allRequest });
+  } else {
+    res
+      .status(200)
+      .json({ message: 'there found some requests', data: allRequest });
+  }
+});
+
 router.put('/all-borrowed-requests', async (req, res) => {
   const { id, ISBN, startDate, endDate } = req.body;
   await admin.approveBorrowedRequest(id, ISBN, startDate, endDate, res);
@@ -49,6 +63,33 @@ router.put('/all-borrowed-requests', async (req, res) => {
     res.json({ massage: 'Approveal completed ' });
   }
 });
+router.put(
+  '/all-borrowed-requests/:id&:ISBN&:startDate&:endDate',
+  async (req, res) => {
+    const { id, ISBN, startDate, endDate } = req.params;
+    await admin.approveBorrowedRequest(id, ISBN, startDate, endDate, res);
+    if (res.status === 500) {
+      res.json({ message: 'samething Wrong.' });
+    } else if (res.status === 405) {
+      res.json({ message: 'samething Wrong.' });
+    } else {
+      await admin.updateStatusInHistory(id, ISBN, aproval);
+      res.json({ massage: 'Approveal completed ' });
+    }
+  }
+);
+
+router.delete('/reject-borrowed-request/:id&:ISBN', async (req, res) => {
+  const { id, ISBN } = req.params;
+  const result = await admin.rejectBorrowedRequest(id, ISBN);
+  if (result.affectedRows == 1) {
+    res.status(202).json({ message: 'delete successfuly', data: result });
+    await admin.updateStatusInHistory(id, ISBN, 'rejected');
+  } else {
+    res.status(400).json({ message: 'bad request' });
+  }
+});
+
 router.delete('/delete-book/:ISBN', async (req, res) => {
   const { ISBN } = req.params;
   //console.log(ISBN);

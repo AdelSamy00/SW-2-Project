@@ -9,7 +9,16 @@ class Book {
       throw error;
     }
   }
-
+  async getAvailableBooks() {
+    try {
+      const books = await conn.awaitQuery(
+        'select * from books where isBorrowed = 0'
+      );
+      return books;
+    } catch (error) {
+      throw error;
+    }
+  }
   addNewBook = (data, imgName, res) => {
     imgName = imgName.replaceAll('\\', '/');
     try {

@@ -35,11 +35,11 @@ const Header = () => {
                         Services
                       </Link>
                     </li>
-                    <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
+                    {/* <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
                       <Link to="/borrow/request" className="nav-link">
                         Request Borrow
                       </Link>
-                    </li>
+                    </li> */}
                     <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
                       <Link to="/borrowed/history" className="nav-link">
                         Borrowed History

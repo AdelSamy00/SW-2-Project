@@ -1,94 +1,206 @@
-import React from "react";
-import AdminHeader from "../../../shared/Pages/AdminHeader.js";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
+import React, { useEffect, useState } from 'react';
+import AdminHeader from '../../../shared/Pages/AdminHeader.js';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const ManageBorrowedReq = () => {
+  const navigate = useNavigate();
+  const [rernder, setRernder] = useState();
+  const [data, setData] = useState([]);
+  const [date, setDate] = useState({
+    startDate: '',
+    endDate: '',
+  });
+  const getAllRequest = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:4000/admin/all-borrowed-request`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log(res.data.message);
+      if (res.data.message == 'there found some requests') {
+        console.log('data get');
+        console.log(res);
+        setData(res.data.data);
+      }
+      if (res.data.message == 'there not found any requests.') {
+        console.log('data get');
+        console.log(res);
+        setData(res.data.data);
+      }
+    } catch (error) {
+      setRernder(error);
+      if (error.response.data.message == 'there not found any requests.') {
+        console.log('error');
+      }
+      console.log(error.response);
+    }
+  };
+
+  const approvalRequests = async (userID, ISBN, startDate, endDate) => {
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    const res = await axios.put(
+      `http://localhost:4000/admin/all-borrowed-requests/${userID}&${ISBN}&${startDate}&${endDate}`
+    );
+    console.log(res.status);
+    if (res.status == 200) {
+      alert('Approval Successfuly.');
+      //navigate('/admin/book/manage');
+    } else {
+      alert('Something Wrong.');
+    }
+    console.log(res);
+  };
+
+  const rejectRequest = async (id, ISBN) => {
+    console.log(id, ISBN);
+    const res = await axios.delete(
+      `http://localhost:4000/admin/reject-borrowed-request/${id}&${ISBN}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    console.log(res);
+    if (res.status == 202) {
+      getAllRequest();
+    } else {
+      console.log('error');
+    }
+  };
+
+  useEffect(() => {
+    if (!localStorage.getItem('token')) {
+      navigate('/');
+    }
+    getAllRequest();
+  }, []);
+  console.log(date);
+  console.log(date.startDate);
+  console.log(date.endDate);
   return (
     <>
       <AdminHeader />
       <div className="container mt-2">
         <h1 className="text-center mt-2 mb-5">Manage Borrowed Requests</h1>
         <div className="d-flex justify-content-between align-content-start flex-wrap m-3 ">
-          {/* {data.length > 0
+          {data.length > 0
             ? data.map((el, i) => {
                 return (
-                  <> */}
-          <Card style={{ width: "22rem", height: "28rem" }} className="mb-3">
-            <div className="d-flex justify-content-around text-center">
-              <Card.Img
-                variant="top"
-                src={
-                  "https://images.unsplash.com/photo-1566275529824-cca6d008f3da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80"
-                }
-                /* src={`/uploads/${el.userimg}`} */
-                style={{
-                  width: "100px",
-                  textAlign: "center",
-                  margin: "auto",
-                }}
-                className="mt-2"
-              />
-              <Card.Img
-                variant="top"
-                src={
-                  "https://images.unsplash.com/photo-1566275529824-cca6d008f3da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80"
-                }
-                /* src={`/uploads/${el.userimg}`} */
-                style={{
-                  width: "100px",
-                  textAlign: "center",
-                  margin: "auto",
-                }}
-                className="mt-2"
-              />
-            </div>
-            <Card.Body /* className="text-center" */>
-              <Card.Title>User Name :{/*  {el.username} */}</Card.Title>
-              <Card.Text>
-                User Email :{/*  {moment(el.date).format("DD-MM-YYYY")} */}
-              </Card.Text>
-              <Card.Text>
-                Book Title :{/*  {moment(el.date).format("DD-MM-YYYY")} */}
-              </Card.Text>
-              <Card.Text>
-                Book ISPN :{/*  {moment(el.date).format("DD-MM-YYYY")} */}
-              </Card.Text>
-              <div className="d-flex justify-content-between text-center mb-3">
-                <label for="html5-date-input" className="col-form-label">
-                  Return Date :
-                </label>
-                <div className="col-md-8">
-                  <input
-                    className="form-control"
-                    type="date"
-                    id="html5-date-input"
-                  ></input>
-                </div>
-              </div>
-
-              <div className="d-flex justify-content-around text-center">
-                <Button
-                  variant="success"
-                  size="lg"
-                  /*  onClick={() => dltUser(el.id)} */
-                >
-                  Accept
-                </Button>
-                <Button
-                  variant="danger"
-                  size="lg"
-                  /*  onClick={() => dltUser(el.id)} */
-                >
-                  Reject
-                </Button>
-              </div>
-            </Card.Body>
-          </Card>
-          {/*</> 
+                  <>
+                    <Card
+                      style={{ width: '22rem', height: '30rem' }}
+                      className="mb-3"
+                    >
+                      <Card.Header>
+                        <div className="d-flex justify-content-around text-center">
+                          <Card.Img
+                            variant="top"
+                            src={`${el.img_url}`}
+                            style={{
+                              width: '100px',
+                              height: '121.438px',
+                              textAlign: 'center',
+                              margin: 'auto',
+                            }}
+                            className="mt-2"
+                          />
+                        </div>
+                      </Card.Header>
+                      <Card.Body /* className="text-center" */>
+                        <Card.Title>User Name : {el.name}</Card.Title>
+                        <Card.Text>User Email : {el.email}</Card.Text>
+                        <Card.Title>Book Title : {el.title}</Card.Title>
+                        <Card.Text>Book ISPN : {el.ISBN}</Card.Text>
+                        <div className="d-flex justify-content-between text-center mb-3">
+                          <label
+                            for="html5-date-input"
+                            className="col-form-label"
+                          >
+                            start Date : {el.startDate}
+                          </label>
+                          <div className="col-md-8">
+                            <input
+                              className="form-control"
+                              type="date"
+                              id="html5-date-input"
+                              name="stertDate"
+                              onChange={(e) => {
+                                setDate({
+                                  ...date,
+                                  startDate: e.target.value,
+                                });
+                              }}
+                            ></input>
+                          </div>
+                        </div>
+                        <div className="d-flex justify-content-between text-center mb-3">
+                          <label
+                            for="html5-date-input"
+                            className="col-form-label"
+                          >
+                            Return Date :{el.endDate}
+                          </label>
+                          <div className="col-md-8">
+                            <input
+                              className="form-control"
+                              type="date"
+                              id="html5-date-input"
+                              name="endDate"
+                              onChange={(e) => {
+                                setDate({
+                                  ...date,
+                                  endDate: e.target.value,
+                                });
+                              }}
+                            ></input>
+                          </div>
+                        </div>
+                        <Card.Footer>
+                          <div className="d-flex justify-content-around text-center">
+                            <Button
+                              variant="success"
+                              size="lg"
+                              onClick={(e) => {
+                                //e.preventDefault();
+                                approvalRequests(
+                                  el.id,
+                                  el.ISBN,
+                                  date.startDate,
+                                  date.endDate
+                                );
+                              }}
+                            >
+                              Accept
+                            </Button>
+                            <Button
+                              variant="danger"
+                              size="lg"
+                              onClick={(e) => {
+                                rejectRequest(el.id, el.ISBN);
+                              }}
+                            >
+                              Reject
+                            </Button>
+                          </div>
+                        </Card.Footer>
+                      </Card.Body>
+                    </Card>
+                  </>
                 );
               })
-            : ""} */}
+            : ''}
         </div>
       </div>
     </>

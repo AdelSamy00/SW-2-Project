@@ -1,7 +1,6 @@
 const conn = require('../config/connection');
-const Book = require('./Book');
 
-class User extends Book {
+class User {
   async getUserByEmail(email) {
     try {
       const result = await conn.awaitQuery('select * from users where ?', {
@@ -65,9 +64,12 @@ class User extends Book {
 
   async getHistory(userID) {
     try {
-      const result = await conn.awaitQuery('select * from history where ?', {
-        user_id: userID,
-      });
+      const result = await conn.awaitQuery(
+        'select * from history join books on books.ISBN =history.book_ISBN join borrowed on borrowed.book_ISBN = books.ISBN WHERE history.?',
+        {
+          user_id: userID,
+        }
+      );
       console.log(result);
       return result;
     } catch (error) {

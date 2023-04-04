@@ -130,7 +130,10 @@ const AcceptUser = () => {
                           <Button
                             variant="danger"
                             size="lg"
-                            onClick={() => rejectUser(el.id)}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              rejectUser(el.id);
+                            }}
                           >
                             Reject
                           </Button>

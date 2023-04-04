@@ -2,7 +2,7 @@ const router = require('express').Router();
 const conn = require('../config/connection');
 const Book = require('./Book');
 
-class Admin extends Book {
+class Admin {
   getAllUsers = () => {
     try {
       const result = conn.awaitQuery('select * from users');
@@ -62,40 +62,37 @@ class Admin extends Book {
       throw error;
     }
   }
-  async setStatusOfBookRequest(ISBN) {
-    try {
-      await conn.awaitQuery(
-        'update history set ? where ?',
-        [{ status: 'aproval' }, { book_ISBN: ISBN }]
-        /* (err) => {
-          if (err) {
-            return res.status(500);
-          } else {
-            return res.status(200);
-          }
-        } */
-      );
-    } catch (error) {
-      throw error;
-    }
-  }
+
   async approveBorrowedRequest(id, ISBN, startDate, endDate, res) {
     try {
-      const result = await conn.awaitQuery(
-        'update borrowed set ? where ? and ?',
-        [
-          { startDate: startDate, endDate: endDate, is_Borrowed: 1 },
-          { user_id: id },
-          { book_ISBN: ISBN },
-        ],
-        (err) => {
-          if (err) {
-            return res.status(500);
-          } else {
-            return res.status(200);
-          }
-        }
+      const status = await conn.awaitQuery(
+        'select isBorrowed from books where ?',
+        { ISBN: ISBN }
       );
+      console.log(status[0].isBorrowed);
+      if (!status[0].isBorrowed) {
+        await conn.awaitQuery('update books set ? where ?', [
+          { isBorrowed: 1 },
+          { ISBN: ISBN },
+        ]);
+        await conn.awaitQuery(
+          'update borrowed set ? where ? and ?',
+          [
+            { startDate: startDate, endDate: endDate, is_Borrowed: 1 },
+            { user_id: id },
+            { book_ISBN: ISBN },
+          ],
+          (err) => {
+            if (err) {
+              return res.status(500);
+            } else {
+              return res.status(200);
+            }
+          }
+        );
+      } else {
+        res.status(405);
+      }
     } catch (error) {
       throw error;
     }
@@ -106,14 +103,14 @@ class Admin extends Book {
       const deletedBook = await conn.awaitQuery('Delete from books where ?', {
         ISBN: ISBN,
       });
-      console.log(deletedBook);
+      //console.log(deletedBook);
       return deletedBook;
     } catch (error) {
       throw error;
     }
   }
   async updateBook(ISBN, book, res) {
-    console.log(book);
+    //console.log(book);
     const updatedBook = await conn.awaitQuery(
       'update books set ? where ?',
       [
@@ -137,6 +134,35 @@ class Admin extends Book {
       }
     );
     return updatedBook;
+  }
+  async getAllBorrowedRequest() {
+    const result = await conn.awaitQuery(
+      'select * from borrowed join books on books.ISBN = borrowed.book_ISBN join users on borrowed.user_id = users.id where books.isBorrowed = 0'
+    );
+    return result;
+  }
+  async rejectBorrowedRequest(id, ISBN) {
+    try {
+      const deleteRequest = await conn.awaitQuery(
+        'Delete from borrowed where ? and ?',
+        [
+          {
+            user_id: id,
+          },
+          { book_ISBN: ISBN },
+        ]
+      );
+      return deleteRequest;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async updateStatusInHistory(id, ISBN, status) {
+    await conn.awaitQuery('update history set ? where ? and ?', [
+      { status: status },
+      { user_id: id },
+      { book_ISBN: ISBN },
+    ]);
   }
 }
 module.exports = Admin;

@@ -53,6 +53,17 @@ router.get('/', async function (req, res) {
       .json({ message: 'Get all books successfully.', data: books });
   }
 });
+router.get('/available-Books', async function (req, res) {
+  const books = await book.getAvailableBooks();
+  //console.log(books);
+  if (books.length == 0) {
+    res.status(404).json({ message: 'Not found any books!' });
+  } else {
+    res
+      .status(201)
+      .json({ message: 'Get all books successfully.', data: books });
+  }
+});
 
 router.post('/add-new-book', upload.single('photo'), async function (req, res) {
   //console.log(req.body.description);

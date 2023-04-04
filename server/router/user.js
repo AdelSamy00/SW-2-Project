@@ -1,9 +1,11 @@
 const router = require('express').Router();
 const conn = require('../config/connection');
+const Book = require('../model/Book');
 const User = require('../model/User');
 const { v4: uuidv4, v4 } = require('uuid');
 
 const user = new User();
+const book = new Book();
 router.post('/signup', async function (req, res) {
   const data = req.body;
   const result = await user.getUserByEmail(data.email);
@@ -19,7 +21,7 @@ router.post('/signup', async function (req, res) {
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   const result = await user.userLogin(email, password);
-  console.log(result[0].status);
+  //console.log(result[0].status);
   if (result[0].status != 1) {
     res.status(405).json({
       message: 'You cannot login new please wait until your approval.',
@@ -37,25 +39,38 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/add-book-request', async function (req, res) {
-  const { id, ISBN } = req.body;
+router.post('/add-book-request/:id&:ISBN', async function (req, res) {
+  const { id, ISBN } = req.params;
+  console.log(id, ISBN);
   try {
-    const result = await user.checkIfBorrowed(ISBN);
-    console.log(result[0].isBorrowed);
+    const result = await book.checkIfBorrowed(ISBN);
+    console.log(result);
     if (result[0].isBorrowed == 1) {
       res
         .status(401)
         .json({ message: 'the book is already Borrowed by another user.' });
     } else {
-      await user.getRequestToBorrow(id, ISBN, res);
+      await book.getRequestToBorrow(id, ISBN, res);
     }
   } catch (error) {
     throw error;
   }
 });
 
-router.get('/history', async function (req, res) {
-  const { userID } = req.body;
+router.get('/get-book/:ISBN', async (req, res) => {
+  const { ISBN } = req.params;
+  try {
+    const result = await book.getBookByISBN(ISBN);
+    console.log(result);
+    res.status(200).json({ message: 'Get data', data: result });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+    throw error;
+  }
+});
+
+router.get('/history/:userID', async function (req, res) {
+  const { userID } = req.params;
   console.log(userID);
   try {
     const result = await user.getHistory(userID);

@@ -24,7 +24,7 @@ function App() {
         <Route path="/services" element={<Services />}></Route>
         <Route path="/books" element={<Books />}></Route>
         <Route path="/contact" element={<Contact />}></Route>
-        <Route path="/borrow/request" element={<Borrowed />}></Route>
+        <Route path="/borrow/request/" element={<Borrowed />}></Route>
         <Route path="/borrowed/history" element={<BorrowedHistory />}></Route>
         <Route path="/admin/book/add" element={<AddBook />}></Route>
         <Route path="/admin/book/manage" element={<ManageBooks />}></Route>
