@@ -22,13 +22,13 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   const result = await user.userLogin(email, password);
   //console.log(result[0].status);
-  if (result[0].status != 1) {
-    res.status(405).json({
-      message: 'You cannot login new please wait until your approval.',
-    });
-  } else if (result.length == 0) {
+  if (result.length == 0) {
     res.status(404).json({
       message: 'please check you email or pasword.',
+    });
+  } else if (result[0].status != 1) {
+    res.status(405).json({
+      message: 'You cannot login new please wait until your approval.',
     });
   } else {
     res
@@ -77,6 +77,35 @@ router.get('/history/:userID', async function (req, res) {
     res.status(200).json({ message: 'user history', data: result });
   } catch (error) {
     res.status(404).json({ message: error.message });
+    throw error;
+  }
+});
+router.get('/currentApproval/:userID', async function (req, res) {
+  const { userID } = req.params;
+  console.log(userID);
+  try {
+    const result = await user.getAprovalRequests(userID);
+    res.status(200).json({ message: 'user history', data: result });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+    throw error;
+  }
+});
+
+router.put('/returnBook/:id&:ISBN&:limits', async (req, res) => {
+  try {
+    let { id, ISBN, limits } = req.params;
+    //console.log(limits);
+    await user.returnBook(id, ISBN, res);
+    limits = parseInt(limits) + 1;
+    console.log(res.status);
+    const userLimits = await user.updateUserLimits(id, limits);
+    if (res.status === 200) {
+      res.status(200).json({ message: 'returned successfully' });
+    } else {
+      res.status(404).json({ message: 'error' });
+    }
+  } catch (error) {
     throw error;
   }
 });

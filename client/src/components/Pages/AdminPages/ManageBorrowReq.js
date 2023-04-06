@@ -44,22 +44,24 @@ const ManageBorrowedReq = () => {
   };
 
   const approvalRequests = async (userID, ISBN, startDate, endDate) => {
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    };
-    const res = await axios.put(
-      `http://localhost:4000/admin/all-borrowed-requests/${userID}&${ISBN}&${startDate}&${endDate}`
-    );
-    console.log(res.status);
-    if (res.status == 200) {
-      alert('Approval Successfuly.');
-      //navigate('/admin/book/manage');
-    } else {
-      alert('Something Wrong.');
+    try {
+      const res = await axios.put(
+        `http://localhost:4000/admin/all-borrowed-requests/${userID}&${ISBN}&${startDate}&${endDate}`
+      );
+      console.log(res.status);
+      if (res.status == 200) {
+        alert('Approval Successfuly.');
+        navigate('/admin/book/manage');
+      } else {
+        alert('Something Wrong.');
+      }
+      console.log(res);
+    } catch (error) {
+      if (error.response.data.message == 'Not Allowed') {
+        alert('His Limit = 0');
+      }
+      console.log(error.response);
     }
-    console.log(res);
   };
 
   const rejectRequest = async (id, ISBN) => {

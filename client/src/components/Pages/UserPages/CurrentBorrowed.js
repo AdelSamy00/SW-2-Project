@@ -2,19 +2,23 @@ import React, { useEffect, useState } from 'react';
 import Footer from '../../../shared/Pages/Footer.js';
 import Header from '../../../shared/Pages/Header.js';
 import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-const BorrowedHistory = () => {
+const CurrentBorrowed = () => {
   const navigate = useNavigate();
   const userID = window.localStorage.getItem('id');
   const [data, setData] = useState([]);
 
-  const getHistory = async () => {
-    const res = await axios.get(`http://localhost:4000/history/${userID}`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+  const getCurrentBorrowed = async () => {
+    const res = await axios.get(
+      `http://localhost:4000/currentApproval/${userID}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     //console.log(userID);
     if (res.data.message == 'user history') {
       console.log('data get');
@@ -24,26 +28,46 @@ const BorrowedHistory = () => {
       console.log('error');
     }
   };
-
+  let limits = window.localStorage.getItem('limits');
+  const returnBook = async (userID, ISBN) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:4000/returnBook/${userID}&${ISBN}&${limits}`
+      );
+      console.log(res);
+      if (res.data.message == 'returned successfully') {
+        alert('returned Successfuly.');
+        navigate('/books');
+        localStorage.setItem('limits', limits + 1);
+      }
+    } catch (error) {
+      console.log(error.response);
+      if (error.response.data.message == 'error') {
+        alert('returned Successfuly.');
+        navigate('/books');
+        localStorage.setItem('limits', parseInt(limits) + 1);
+      }
+    }
+  };
   useEffect(() => {
     if (!localStorage.getItem('token')) {
       navigate('/');
     }
-    getHistory();
+    getCurrentBorrowed();
   }, []);
   //console.log(data);
   return (
     <>
       <Header />
       <div className="container mt-2">
-        <h1 className="text-center mt-2">Borrowed History</h1>
+        <h1 className="text-center mt-2">Current Borrowed</h1>
         <div className="d-flex justify-content-between align-content-start flex-wrap m-3">
           {data.length > 0
             ? data.map((el, i) => {
                 return (
                   <>
                     <Card
-                      style={{ width: '30rem', height: '28em' }}
+                      style={{ width: '30rem', height: '31.5em' }}
                       className="mb-3"
                     >
                       <Card.Img
@@ -68,6 +92,17 @@ const BorrowedHistory = () => {
                         </Card.Text>
                         <Card.Text>Borrow Date : {el.book_startDate}</Card.Text>
                         <Card.Text>Return Date : {el.book_endDate}</Card.Text>
+                        <div className="d-flex justify-content-around text-center">
+                          <Button
+                            variant="success"
+                            size="lg"
+                            onClick={() => {
+                              returnBook(el.user_id, el.book_ISBN);
+                            }}
+                          >
+                            Return
+                          </Button>
+                        </div>
                       </Card.Body>
                     </Card>
                   </>
@@ -80,4 +115,4 @@ const BorrowedHistory = () => {
     </>
   );
 };
-export default BorrowedHistory;
+export default CurrentBorrowed;

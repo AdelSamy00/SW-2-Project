@@ -67,14 +67,24 @@ router.put(
   '/all-borrowed-requests/:id&:ISBN&:startDate&:endDate',
   async (req, res) => {
     const { id, ISBN, startDate, endDate } = req.params;
-    await admin.approveBorrowedRequest(id, ISBN, startDate, endDate, res);
-    if (res.status === 500) {
-      res.json({ message: 'samething Wrong.' });
-    } else if (res.status === 405) {
-      res.json({ message: 'samething Wrong.' });
+    let userLimits = await admin.getUserLimitsByID(id);
+    userLimits = userLimits.limited_requests;
+    //console.log(userLimits);
+    if (userLimits > 0) {
+      await admin.approveBorrowedRequest(id, ISBN, startDate, endDate, res);
+      if (res.status === 500) {
+        res.json({ message: 'samething Wrong.' });
+      } else if (res.status === 405) {
+        res.json({ message: 'samething Wrong.' });
+      } else {
+        userLimits = userLimits - 1;
+        await admin.updateUserLimits(id, userLimits);
+        await admin.updateStatusInHistory(id, ISBN, 'aproval');
+        await admin.updateDateInHistory(id, ISBN, startDate, endDate);
+        res.json({ message: 'Approveal completed ' });
+      }
     } else {
-      await admin.updateStatusInHistory(id, ISBN, aproval);
-      res.json({ massage: 'Approveal completed ' });
+      res.status(405).json({ message: 'Not Allowed' });
     }
   }
 );

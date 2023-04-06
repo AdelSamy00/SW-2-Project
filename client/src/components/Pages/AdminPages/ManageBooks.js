@@ -11,6 +11,7 @@ const ManageBooks = () => {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
+  const [filter, setFilter] = useState('');
   const getAllBooks = async () => {
     const res = await axios.get('http://localhost:4000/book', {
       headers: {
@@ -42,6 +43,19 @@ const ManageBooks = () => {
       console.log('error');
     }
   };
+
+  const handleSelect = (e) => {
+    setFilter(e.target.value);
+    let value = e.target.value;
+    if (value == 'rackNumber') {
+      let sort = data.sort((a, b) => (a.rackNumber > b.rackNumber ? 1 : -1));
+      setData(sort);
+    } else {
+      let sort = data.sort((a, b) => (a.ISBN > b.ISBN ? 1 : -1));
+      setData(sort);
+    }
+  };
+
   useEffect(() => {
     if (!localStorage.getItem('token')) {
       navigate('/');
@@ -59,6 +73,12 @@ const ManageBooks = () => {
       )}
       <AdminHeader />
       <div className="container mt-2">
+        <select name="dropdown" onChange={handleSelect}>
+          <option value="ISBN" selected>
+            ISBN
+          </option>
+          <option value="rackNumber">rack Number</option>
+        </select>
         <h1 className="text-center mt-2">Manage Books</h1>
         <div className="text-end">
           <Button variant="primary">

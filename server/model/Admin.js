@@ -62,7 +62,32 @@ class Admin {
       throw error;
     }
   }
-
+  async getUserLimitsByID(id) {
+    try {
+      const result = await conn.awaitQuery(
+        'select limited_requests from users where ? ',
+        {
+          id: id,
+        }
+      );
+      return result[0];
+    } catch (error) {
+      throw error;
+    }
+  }
+  async updateUserLimits(id, limit) {
+    try {
+      const result = await conn.awaitQuery('update users set ? where ? ', [
+        { limited_requests: limit },
+        {
+          id: id,
+        },
+      ]);
+      return result[0];
+    } catch (error) {
+      throw error;
+    }
+  }
   async approveBorrowedRequest(id, ISBN, startDate, endDate, res) {
     try {
       const status = await conn.awaitQuery(
@@ -158,8 +183,16 @@ class Admin {
     }
   }
   async updateStatusInHistory(id, ISBN, status) {
-    await conn.awaitQuery('update history set ? where ? and ?', [
+    await conn.awaitQuery('update history set ? where ? and ? and ?', [
       { status: status },
+      { user_id: id },
+      { book_ISBN: ISBN },
+      { status: 'pending' },
+    ]);
+  }
+  async updateDateInHistory(id, ISBN, startDate, endDate) {
+    await conn.awaitQuery('update history set ? where ? and ?', [
+      { book_startDate: startDate, book_endDate: endDate },
       { user_id: id },
       { book_ISBN: ISBN },
     ]);

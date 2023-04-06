@@ -64,14 +64,62 @@ class User {
 
   async getHistory(userID) {
     try {
-      const result = await conn.awaitQuery(
-        'select * from history join books on books.ISBN =history.book_ISBN join borrowed on borrowed.book_ISBN = books.ISBN WHERE history.?',
-        {
-          user_id: userID,
-        }
-      );
-      console.log(result);
+      const result = await conn.awaitQuery('select * from history WHERE ?', {
+        user_id: userID,
+      });
+      //console.log(result);
       return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getAprovalRequests(userID) {
+    try {
+      const result = await conn.awaitQuery(
+        'select * from history WHERE ? and ?',
+        [
+          {
+            user_id: userID,
+          },
+          { status: 'aproval' },
+        ]
+      );
+      //console.log(result);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async returnBook(userID, bookISBN, res) {
+    try {
+      await conn.awaitQuery('update history set ? where ? and ?', [
+        { status: 'Returned' },
+        { book_ISBN: bookISBN },
+        { user_id: userID },
+      ]);
+      await conn.awaitQuery('update books set ? where ?', [
+        { isBorrowed: 0 },
+        { ISBN: bookISBN },
+      ]);
+      await conn.awaitQuery('Delete from borrowed where ? and ?', [
+        { user_id: userID },
+        { book_ISBN: bookISBN },
+      ]);
+      res.status(200);
+    } catch (error) {
+      throw error;
+    }
+  }
+  async updateUserLimits(id, limit) {
+    try {
+      //console.log(limit);
+      const result = await conn.awaitQuery('update users set ? where ? ', [
+        { limited_requests: limit },
+        {
+          id: id,
+        },
+      ]);
+      return result[0];
     } catch (error) {
       throw error;
     }

@@ -80,22 +80,25 @@ class Book {
       throw error;
     }
   }
-  async getBookTitle(bookISBN) {
+  async getAllDetailsOfBook(bookISBN) {
     try {
-      const result = await conn.awaitQuery('select title from books where ?', {
+      const result = await conn.awaitQuery('select * from books where ?', {
         ISBN: bookISBN,
       });
-      return result[0].title;
+      return result[0];
     } catch (error) {
       throw error;
     }
   }
-  async setRequstToHistory(userID, bookISBN, bookTitle) {
+  async setRequstToHistory(userID, bookISBN, book) {
     try {
       await conn.awaitQuery('insert into history set ?', {
         user_id: userID,
         book_ISBN: bookISBN,
-        book_title: bookTitle,
+        book_title: book.title,
+        book_author: book.author,
+        book_subject: book.subject,
+        book_img_url: book.img_url,
       });
     } catch (error) {
       throw error;
@@ -103,7 +106,7 @@ class Book {
   }
   async getRequestToBorrow(userID, bookISBN, res) {
     try {
-      const bookTitle = await this.getBookTitle(bookISBN);
+      const book = await this.getAllDetailsOfBook(bookISBN);
       //console.log(bookTitle);
       const exist = await this.handelBorrowedTable(userID, bookISBN);
       //console.log(Object.keys(exist).length);
@@ -112,7 +115,7 @@ class Book {
           user_id: userID,
           book_ISBN: bookISBN,
         });
-        await this.setRequstToHistory(userID, bookISBN, bookTitle);
+        await this.setRequstToHistory(userID, bookISBN, book);
         res.status(200).json({ message: 'Request send.' });
       } else {
         res

@@ -42,10 +42,11 @@ const Login = () => {
           localStorage.setItem('email', res.data.userData.email);
           localStorage.setItem('token', res.data.userData.token);
           localStorage.setItem('type', res.data.userData.type);
+          localStorage.setItem('limits', res.data.userData.limited_requests);
           if (res.data.userData.type == 1) {
             navigate('/admin/book/manage');
           } else {
-            navigate('/home');
+            navigate('/books');
           }
           //navigate(`/home/${res.data.userData.id}`);
         }

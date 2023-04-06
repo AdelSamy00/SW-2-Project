@@ -10,7 +10,7 @@ const Header = () => {
             <div className="col-12">
               <nav className="navbar navbar-expand-md navbar-light">
                 <Link
-                  to="/home"
+                  to="/books"
                   className="navbar-brand font-italic font-weight-bold"
                 >
                   LIBRARY
@@ -21,11 +21,6 @@ const Header = () => {
                 >
                   <ul className="navbar-nav ml-auto py-4 py-md-0">
                     <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
-                      <Link to="/home" className="nav-link">
-                        Home
-                      </Link>
-                    </li>
-                    <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
                       <Link to="/books" className="nav-link">
                         Books
                       </Link>
@@ -35,11 +30,11 @@ const Header = () => {
                         Services
                       </Link>
                     </li>
-                    {/* <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
-                      <Link to="/borrow/request" className="nav-link">
-                        Request Borrow
+                    <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
+                      <Link to="/borrowed/current" className="nav-link">
+                        Current Borrowed
                       </Link>
-                    </li> */}
+                    </li>
                     <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
                       <Link to="/borrowed/history" className="nav-link">
                         Borrowed History
