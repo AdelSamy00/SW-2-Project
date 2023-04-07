@@ -1,36 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import AdminHeader from '../../../shared/Pages/AdminHeader.js';
-import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import AdminHeader from "../../../shared/Pages/AdminHeader.js";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import InputGroup from "react-bootstrap/InputGroup";
+
 
 const UpdateBook = () => {
+  const [validated, setValidated] = useState(false);
   const navigate = useNavigate();
   const ISBN = useParams();
   //console.log(ISBN);
   const [values, setValues] = useState({
-    ISBN: '',
-    title: '',
-    author: '',
-    subject: '',
-    rackNumber: '',
-    description: '',
+    ISBN: "",
+    title: "",
+    author: "",
+    subject: "",
+    rackNumber: "",
+    description: "",
   });
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     const res = await axios.put(
       `http://localhost:4000/admin/update-book/${ISBN.ISBN}`,
       values
     );
     console.log(res.status);
     if (res.status == 200) {
-      alert('Update Successfuly.');
-      navigate('/admin/book/manage');
+      alert("Update Successfuly.");
+      navigate("/admin/book/manage");
     } else {
-      alert('Something Wrong.');
+      alert("Something Wrong.");
     }
     console.log(res);
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    setValidated(true);
   };
   useEffect(() => {
     const getAllDetails = async (ISBN) => {
@@ -38,13 +48,13 @@ const UpdateBook = () => {
         `http://localhost:4000/book/book-by-ISBN/${ISBN}`,
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
       //console.log(res);
-      if (res.data.message == 'found') {
-        console.log('data get');
+      if (res.data.message == "found") {
+        console.log("data get");
         //console.log(res.data.data);
         //console.log(res);
         const { ISBN, title, author, subject, rackNumber, description } =
@@ -59,7 +69,7 @@ const UpdateBook = () => {
           description: description,
         });
       } else {
-        console.log('error');
+        console.log("error");
       }
     };
     getAllDetails(ISBN.ISBN);
@@ -71,8 +81,8 @@ const UpdateBook = () => {
       <div className="container mt-3">
         <h1>Upload Book</h1>
         {
-          <Form>
-            <Form.Group className="mb-3" controlId="formBasicISBN">
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form.Group className="mb-3" controlId="validationISBN">
               <Form.Label>ISBN</Form.Label>
               <Form.Control
                 type="namber"
@@ -83,19 +93,23 @@ const UpdateBook = () => {
                 readOnly
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicAutorName">
+            <Form.Group className="mb-3" controlId="validationAuthor">
               <Form.Label>Author</Form.Label>
               <Form.Control
+                required
                 type="text"
                 name="author"
                 onChange={(e) => {
                   setValues({ ...values, author: e.target.value });
                 }}
                 value={values.author}
-                required="true"
               />
+              <Form.Control.Feedback type="invalid">
+                Please Enter an Author Name.
+              </Form.Control.Feedback>
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicTitle">
+            <Form.Group className="mb-3" controlId="validationTitle">
               <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
@@ -106,8 +120,12 @@ const UpdateBook = () => {
                 value={values.title}
                 required
               />
+              <Form.Control.Feedback type="invalid">
+                Please Enter The Title.
+              </Form.Control.Feedback>
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicRackNumber">
+            <Form.Group className="mb-3" controlId="validationRackNumber">
               <Form.Label>Rack Number</Form.Label>
               <Form.Control
                 type="text"
@@ -118,8 +136,13 @@ const UpdateBook = () => {
                 value={values.rackNumber}
                 required
               />
+              <Form.Control.Feedback type="invalid">
+                Please Enter The Rack Number.
+              </Form.Control.Feedback>
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicSubject">
+
+            <Form.Group className="mb-3" controlId="validationSubject">
               <Form.Label>Subject</Form.Label>
               <Form.Control
                 type="text"
@@ -130,8 +153,12 @@ const UpdateBook = () => {
                 value={values.subject}
                 required
               />
+              <Form.Control.Feedback type="invalid">
+                Please Enter The Subject.
+              </Form.Control.Feedback>
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicDescription">
+            <Form.Group className="mb-3" controlId="validationDescription">
               <Form.Label>Description</Form.Label>
               <Form.Control
                 type="text"
@@ -142,6 +169,10 @@ const UpdateBook = () => {
                 value={values.description}
                 required
               />
+              <Form.Control.Feedback type="invalid">
+                Please Enter The Description.
+              </Form.Control.Feedback>
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
 
             {/* <Form.Group className="mb-3" controlId="formBasicFile">
