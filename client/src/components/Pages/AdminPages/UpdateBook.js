@@ -4,14 +4,11 @@ import Form from "react-bootstrap/Form";
 import AdminHeader from "../../../shared/Pages/AdminHeader.js";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import InputGroup from "react-bootstrap/InputGroup";
-
 
 const UpdateBook = () => {
   const [validated, setValidated] = useState(false);
   const navigate = useNavigate();
   const ISBN = useParams();
-  //console.log(ISBN);
   const [values, setValues] = useState({
     ISBN: "",
     title: "",
@@ -22,18 +19,25 @@ const UpdateBook = () => {
   });
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const res = await axios.put(
-      `http://localhost:4000/admin/update-book/${ISBN.ISBN}`,
-      values
-    );
-    console.log(res.status);
-    if (res.status == 200) {
-      alert("Update Successfuly.");
-      navigate("/admin/book/manage");
-    } else {
-      alert("Something Wrong.");
+    if (
+      values.title == "" &&
+      values.description == "" &&
+      values.author == "" &&
+      values.rackNumber == "" &&
+      values.subject == ""
+    ) {
+      const res = await axios.put(
+        `http://localhost:4000/admin/update-book/${ISBN.ISBN}`,
+        values
+      );
+      if (res.status == 200) {
+        alert("Update Successfuly.");
+        navigate("/admin/book/manage");
+      } else {
+        alert("Something Wrong.");
+      }
     }
-    console.log(res);
+
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -52,14 +56,9 @@ const UpdateBook = () => {
           },
         }
       );
-      //console.log(res);
       if (res.data.message == "found") {
-        console.log("data get");
-        //console.log(res.data.data);
-        //console.log(res);
         const { ISBN, title, author, subject, rackNumber, description } =
           res.data.data[0];
-        //console.log(ISBN);
         setValues({
           ISBN: ISBN,
           title: title,
@@ -68,13 +67,10 @@ const UpdateBook = () => {
           rackNumber: rackNumber,
           description: description,
         });
-      } else {
-        console.log("error");
       }
     };
     getAllDetails(ISBN.ISBN);
   }, []);
-  console.log(values);
   return (
     <>
       <AdminHeader />

@@ -15,14 +15,12 @@ const Signup = () => {
       ...prev,
       [event.target.name]: [event.target.value],
     }));
-    console.log(event.target);
   };
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
       .post('http://localhost:4000/signup', values)
       .then((res) => {
-        console.log(res.status);
         if (res.status == 210) {
           alert('this Email address is already reqistered');
         } else {

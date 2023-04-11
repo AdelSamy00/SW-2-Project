@@ -15,7 +15,6 @@ const Borrowed = (props) => {
   const location = useLocation();
   const ISBN = location.state?.ISBN;
   const id = localStorage.getItem("id");
-  //console.log(ISBN);
   const [show, setShow] = useState(false);
   const [values, setValues] = useState({
     ISBN: "",
@@ -45,21 +44,16 @@ const Borrowed = (props) => {
           },
         }
       );
-      //console.log(res);
       if (res.data.message == "found") {
-        console.log("data get");
         const { ISBN, title } = res.data.data[0];
         setValues({
           ISBN: ISBN,
           title: title,
         });
-      } else {
-        console.log("error");
       }
     };
     getAllDetails(ISBN);
   }, []);
-  console.log(values);
   return (
     <>
       {show ? (

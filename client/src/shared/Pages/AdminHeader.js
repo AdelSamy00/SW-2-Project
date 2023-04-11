@@ -46,7 +46,6 @@ const AdminHeader = () => {
                         <Button
                           variant="outline-dark"
                           onClick={() => {
-                            console.log(window.localStorage);
                             window.localStorage.clear();
                           }}
                         >

@@ -23,23 +23,16 @@ const ManageBorrowedReq = () => {
           },
         }
       );
-      console.log(res.data.message);
       if (res.data.message == 'there found some requests') {
-        console.log('data get');
-        console.log(res);
         setData(res.data.data);
       }
       if (res.data.message == 'there not found any requests.') {
-        console.log('data get');
-        console.log(res);
         setData(res.data.data);
       }
     } catch (error) {
       setRernder(error);
       if (error.response.data.message == 'there not found any requests.') {
-        console.log('error');
       }
-      console.log(error.response);
     }
   };
 
@@ -48,24 +41,20 @@ const ManageBorrowedReq = () => {
       const res = await axios.put(
         `http://localhost:4000/admin/all-borrowed-requests/${userID}&${ISBN}&${startDate}&${endDate}`
       );
-      console.log(res.status);
       if (res.status == 200) {
         alert('Approval Successfuly.');
         navigate('/admin/book/manage');
       } else {
         alert('Something Wrong.');
       }
-      console.log(res);
     } catch (error) {
       if (error.response.data.message == 'Not Allowed') {
         alert('His Limit = 0');
       }
-      console.log(error.response);
     }
   };
 
   const rejectRequest = async (id, ISBN) => {
-    console.log(id, ISBN);
     const res = await axios.delete(
       `http://localhost:4000/admin/reject-borrowed-request/${id}&${ISBN}`,
       {
@@ -74,11 +63,8 @@ const ManageBorrowedReq = () => {
         },
       }
     );
-    console.log(res);
     if (res.status == 202) {
       getAllRequest();
-    } else {
-      console.log('error');
     }
   };
 
@@ -88,9 +74,6 @@ const ManageBorrowedReq = () => {
     }
     getAllRequest();
   }, []);
-  console.log(date);
-  console.log(date.startDate);
-  console.log(date.endDate);
   return (
     <>
       <AdminHeader />

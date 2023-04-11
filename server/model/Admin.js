@@ -17,7 +17,7 @@ class Admin {
       const result = await conn.awaitQuery('select * from users where ?', {
         status: 0,
       });
-      console.log(result);
+      //console.log(result);
       return result;
     } catch (error) {
       throw error;
@@ -94,7 +94,7 @@ class Admin {
         'select isBorrowed from books where ?',
         { ISBN: ISBN }
       );
-      console.log(status[0].isBorrowed);
+/*       console.log(status[0].isBorrowed); */
       if (!status[0].isBorrowed) {
         await conn.awaitQuery('update books set ? where ?', [
           { isBorrowed: 1 },

@@ -19,14 +19,10 @@ const ManageBooks = () => {
       },
     });
     if (res.data.message == "Get all books successfully.") {
-      console.log("data get");
       setData(res.data.data);
-    } else {
-      console.log("error");
     }
   };
   const deleteBook = async (ISBN) => {
-    console.log(ISBN);
     const res = await axios.delete(
       `http://localhost:4000/admin/delete-book/${ISBN}`,
       {
@@ -35,12 +31,9 @@ const ManageBooks = () => {
         },
       }
     );
-    console.log(res);
     if (res.status == 202) {
       getAllBooks();
       setShow(true);
-    } else {
-      console.log("error");
     }
   };
 
@@ -59,6 +52,9 @@ const ManageBooks = () => {
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/");
+    }
+    if (localStorage.getItem("type")=="0") {
+      navigate("*")
     }
     getAllBooks();
   }, []);
@@ -93,7 +89,6 @@ const ManageBooks = () => {
         <div className="d-flex justify-content-between align-content-start flex-wrap m-3">
           {data.length > 0
             ? data.map((el, i) => {
-                //console.log(url);
                 return (
                   <>
                     <Card
@@ -114,7 +109,7 @@ const ManageBooks = () => {
                       <Card.Body /* className="text-center" */>
                         <Card.Title>Title : {el.title}</Card.Title>
                         <Card.Text>Author :{el.author}</Card.Text>
-                        <Card.Text>ISPN :{el.ISBN}</Card.Text>
+                        <Card.Text>ISBN :{el.ISBN}</Card.Text>
                         <Card.Text>Subject :{el.subject}</Card.Text>
                         <Card.Text>Description :{el.description}</Card.Text>
                         <Card.Text>Rack Number :{el.rackNumber}</Card.Text>

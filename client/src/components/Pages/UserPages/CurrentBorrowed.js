@@ -19,13 +19,9 @@ const CurrentBorrowed = () => {
         },
       }
     );
-    //console.log(userID);
     if (res.data.message == 'user history') {
-      console.log('data get');
-      console.log(res);
+
       setData(res.data.data);
-    } else {
-      console.log('error');
     }
   };
   let limits = window.localStorage.getItem('limits');
@@ -34,14 +30,12 @@ const CurrentBorrowed = () => {
       const res = await axios.put(
         `http://localhost:4000/returnBook/${userID}&${ISBN}&${limits}`
       );
-      console.log(res);
       if (res.data.message == 'returned successfully') {
         alert('returned Successfuly.');
         navigate('/books');
         localStorage.setItem('limits', limits + 1);
       }
     } catch (error) {
-      console.log(error.response);
       if (error.response.data.message == 'error') {
         alert('returned Successfuly.');
         navigate('/books');
@@ -55,7 +49,6 @@ const CurrentBorrowed = () => {
     }
     getCurrentBorrowed();
   }, []);
-  //console.log(data);
   return (
     <>
       <Header />

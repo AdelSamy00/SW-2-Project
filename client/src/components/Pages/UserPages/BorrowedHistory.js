@@ -15,13 +15,8 @@ const BorrowedHistory = () => {
         'Content-Type': 'application/json',
       },
     });
-    //console.log(userID);
     if (res.data.message == 'user history') {
-      console.log('data get');
-      console.log(res);
       setData(res.data.data);
-    } else {
-      console.log('error');
     }
   };
 
@@ -31,7 +26,6 @@ const BorrowedHistory = () => {
     }
     getHistory();
   }, []);
-  //console.log(data);
   return (
     <>
       <Header />

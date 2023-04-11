@@ -21,11 +21,7 @@ const Books = () => {
       },
     });
     if (res.data.message == "Get all books successfully.") {
-      console.log("data get");
-      console.log(res.data.data);
       setData(res.data.data);
-    } else {
-      console.log("error");
     }
   };
 

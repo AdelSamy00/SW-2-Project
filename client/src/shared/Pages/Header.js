@@ -40,18 +40,11 @@ const Header = () => {
                         Borrowed History
                       </Link>
                     </li>
-                    <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
-                      <Link to="/contact" className="nav-link">
-                        Contact Us
-                      </Link>
-                    </li>
-
                     <li className="pl-4 pl-md-0 ml-0 ml-md-4">
                       <Link to="/" className="nav-link">
                         <Button
                           variant="outline-dark"
                           onClick={() => {
-                            console.log(window.localStorage);
                             window.localStorage.clear();
                           }}
                         >

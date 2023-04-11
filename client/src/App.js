@@ -1,11 +1,10 @@
 import Login from '../src/shared/Pages/Login.js';
 import Signup from '../src/shared/Pages/Signup.js';
+import NotFound from "../src/shared/Pages/NotFound.js";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-//import Home from '../src/components/Pages/UserPages/Home.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Services from '../src/components/Pages/UserPages/Services.js';
 import Books from '../src/components/Pages/UserPages/Books.js';
-import Contact from '../src/components/Pages/UserPages/Contact.js';
 import Borrowed from './components/Pages/UserPages/RequestBorrow.js';
 import BorrowedHistory from '../src/components/Pages/UserPages/BorrowedHistory.js';
 import AddBook from './components/Pages/AdminPages/AddBook.js';
@@ -21,10 +20,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
-        {/* <Route path="/home" element={<Home />}></Route> */}
         <Route path="/services" element={<Services />}></Route>
         <Route path="/books" element={<Books />}></Route>
-        <Route path="/contact" element={<Contact />}></Route>
         <Route path="/borrow/request/" element={<Borrowed />}></Route>
         <Route path="/borrowed/history" element={<BorrowedHistory />}></Route>
         <Route path="/admin/book/add" element={<AddBook />}></Route>
@@ -36,6 +33,7 @@ function App() {
           element={<ManageBorrowedReq />}
         ></Route>
         <Route path="/admin/book/update/:ISBN" element={<UpdateBook />}></Route>
+        <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>
   );
