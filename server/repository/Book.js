@@ -1,9 +1,9 @@
-const conn = require("../config/connection");
+const conn = require('../config/connection');
 
 class Book {
   async getAllBooks() {
     try {
-      const books = await conn.awaitQuery("select * from books");
+      const books = await conn.awaitQuery('select * from books');
       return books;
     } catch (error) {
       throw error;
@@ -12,17 +12,17 @@ class Book {
   async getAvailableBooks() {
     try {
       const books = await conn.awaitQuery(
-        "select * from books where isBorrowed = 0"
+        'select * from books where isBorrowed = 0'
       );
       return books;
     } catch (error) {
       throw error;
     }
   }
-  addNewBook = (data, imgName, res) => {
-    imgName = imgName.replaceAll("\\", "/");
+  /*   addNewBook = (data, imgName, res) => {
+    imgName = imgName.replaceAll('\\', '/');
     try {
-      conn.query("insert into books set ?", {
+      conn.query('insert into books set ?', {
         ISBN: data.ISBN,
         title: data.title,
         author: data.author,
@@ -31,36 +31,37 @@ class Book {
         description: data.description,
         img_url: imgName,
       });
-      res.json({ status: 201, messege: "created succsessfully" });
+      res.json({ status: 201, messege: 'created succsessfully' });
     } catch (error) {
-      res.status(204).json({ messege: "failed to save the book" });
+      res.status(204).json({ messege: 'failed to save the book' });
       throw error;
     }
-  };
+  }; */
 
-  async getBorrowedBook(bookISBN) {
+  async getBookStatus(ISBN) {
     try {
-      const result = await conn.awaitQuery("select * from books where ?", {
-        ISBN: bookISBN,
-      });
-      return result[0];
+      const status = await conn.awaitQuery(
+        'select isBorrowed from books where ?',
+        { ISBN: ISBN }
+      );
+      return status;
     } catch (error) {
       throw error;
     }
   }
-  async checkIfBorrowed(bookISBN) {
+  /* async checkIfBorrowed(bookISBN) {
     try {
-      const result = await conn.awaitQuery("select * from books where ?", {
+      const result = await conn.awaitQuery('select * from books where ?', {
         ISBN: bookISBN,
       });
       return result;
     } catch (error) {
       throw error;
     }
-  }
+  } */
   async getBookByISBN(ISBN) {
     try {
-      const result = await conn.awaitQuery("select * from books where ?", {
+      const result = await conn.awaitQuery('select * from books where ?', {
         ISBN: ISBN,
       });
       return result;
@@ -68,11 +69,11 @@ class Book {
       throw error;
     }
   }
-
+  /* 
   async handelBorrowedTable(userID, bookISBN) {
     try {
       const result = await conn.awaitQuery(
-        "select * from borrowed where ? and ?",
+        'select * from borrowed where ? and ?',
         [{ user_id: userID }, { book_ISBN: bookISBN }]
       );
       return result;
@@ -82,7 +83,7 @@ class Book {
   }
   async getAllDetailsOfBook(bookISBN) {
     try {
-      const result = await conn.awaitQuery("select * from books where ?", {
+      const result = await conn.awaitQuery('select * from books where ?', {
         ISBN: bookISBN,
       });
       return result[0];
@@ -92,7 +93,7 @@ class Book {
   }
   async setRequstToHistory(userID, bookISBN, book) {
     try {
-      await conn.awaitQuery("insert into history set ?", {
+      await conn.awaitQuery('insert into history set ?', {
         user_id: userID,
         book_ISBN: bookISBN,
         book_title: book.title,
@@ -111,20 +112,20 @@ class Book {
       const exist = await this.handelBorrowedTable(userID, bookISBN);
       //console.log(Object.keys(exist).length);
       if (Object.keys(exist).length == 0) {
-        await conn.awaitQuery("insert into borrowed set ?", {
+        await conn.awaitQuery('insert into borrowed set ?', {
           user_id: userID,
           book_ISBN: bookISBN,
         });
         await this.setRequstToHistory(userID, bookISBN, book);
-        res.status(200).json({ message: "Request send." });
+        res.status(200).json({ message: 'Request send.' });
       } else {
         res
           .status(401)
-          .json({ message: "you are already send this request.", data: exist });
+          .json({ message: 'you are already send this request.', data: exist });
       }
     } catch (error) {
       throw error;
     }
-  }
+  } */
 }
 module.exports = Book;

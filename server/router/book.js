@@ -3,11 +3,11 @@ const { log } = require('console');
 const conn = require('../config/connection');
 const adminAuth = require('../middlewares/admin');
 const auther = require('../middlewares/auther');
-const Book = require('../model/Book');
+const Book = require('../repository/Book');
 const multer = require('multer');
 const path = require('path');
 const { fileURLToPath } = require('url');
-//const dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const uploadPath = path.join(
   __dirname,
   '..',
@@ -17,7 +17,7 @@ const uploadPath = path.join(
   'uploads',
   '/'
 );
-console.log(uploadPath);
+
 const book = new Book();
 //img storage confing
 let imgConfig = multer.diskStorage({
@@ -43,35 +43,30 @@ let upload = multer({
 });
 
 router.get('/', async function (req, res) {
-  const books = await book.getAllBooks();
-  //console.log(books);
-  if (books.length == 0) {
+  const allBooks = await book.getAllBooks();
+  if (allBooks.length == 0) {
     res.status(404).json({ message: 'Not found any books!' });
   } else {
     res
       .status(201)
-      .json({ message: 'Get all books successfully.', data: books });
+      .json({ message: 'Get all books successfully.', data: allBooks });
   }
 });
 router.get('/available-Books', async function (req, res) {
-  const books = await book.getAvailableBooks();
-  //console.log(books);
-  if (books.length == 0) {
+  const availableBooks = await book.getAvailableBooks();
+  if (availableBooks.length == 0) {
     res.status(404).json({ message: 'Not found any books!' });
   } else {
     res
       .status(201)
-      .json({ message: 'Get all books successfully.', data: books });
+      .json({ message: 'Get all books successfully.', data: availableBooks });
   }
 });
 
 router.post('/add-new-book', upload.single('photo'), async function (req, res) {
-  //console.log(req.body.description);
   try {
     const bookData = req.body;
     let imgName = req.file;
-    //console.log(imgName);
-    //console.log(req.file);
     const filePath = '/uploads/' + imgName.filename;
     await book.addNewBook(bookData, filePath, res);
   } catch (error) {
@@ -83,9 +78,7 @@ router.post('/add-new-book', upload.single('photo'), async function (req, res) {
 router.get('/book-by-ISBN/:ISBN', async (req, res) => {
   try {
     const { ISBN } = req.params;
-    //console.log(ISBN);
     const bookData = await book.getBookByISBN(ISBN);
-    //console.log(bookData);
     if (bookData.length > 0) {
       res.status(200).json({ message: 'found', data: bookData });
     } else {

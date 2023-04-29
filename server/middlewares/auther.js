@@ -1,4 +1,4 @@
-const User = require('../model/User');
+const User = require('../repository/User');
 
 const user = new User();
 
