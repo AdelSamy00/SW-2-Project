@@ -98,6 +98,25 @@ class Admin extends BookForAdmin {
       throw error;
     }
   } */
+  //Override
+  async addNewBook(data, imgName, res) {
+    imgName = imgName.replaceAll('\\', '/');
+    try {
+      conn.query('insert into books set ?', {
+        ISBN: data.ISBN,
+        title: data.title,
+        author: data.author,
+        subject: data.subject,
+        rackNumber: data.rackNumber,
+        description: data.description,
+        img_url: imgName,
+      });
+      res.json({ status: 201, messege: 'created succsessfully' });
+    } catch (error) {
+      res.status(204).json({ messege: 'failed to save the book' });
+      throw error;
+    }
+  }
   // Override
   async updateBookStatus(ISBN) {
     try {
@@ -153,7 +172,7 @@ class Admin extends BookForAdmin {
     }
   }
   // Override
-  async updateBook(ISBN, book, res) {
+  async updateBook(book, res) {
     const updatedBook = await conn.awaitQuery(
       'update books set ? where ?',
       [
@@ -165,7 +184,7 @@ class Admin extends BookForAdmin {
           description: book.description,
         },
         {
-          ISBN: ISBN,
+          ISBN: book.ISBN,
         },
       ],
       (err) => {
@@ -213,10 +232,11 @@ class Admin extends BookForAdmin {
   }
   // Override
   async updateDateInHistory(id, ISBN, startDate, endDate) {
-    await conn.awaitQuery('update history set ? where ? and ?', [
+    await conn.awaitQuery('update history set ? where ? and ? and ?', [
       { book_startDate: startDate, book_endDate: endDate },
       { user_id: id },
       { book_ISBN: ISBN },
+      { status: 'pending' },
     ]);
   }
 }

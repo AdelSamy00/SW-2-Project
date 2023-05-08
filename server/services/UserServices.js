@@ -77,9 +77,9 @@ class UserServices {
     }
   }
 
-  async returnBook(id, ISBN, res) {
+  async returnBook(id, ISBN, startDate, endDate, res) {
     try {
-      await this.user.returnBook(id, ISBN, res);
+      await this.user.returnBook(id, ISBN, startDate, endDate, res);
     } catch (error) {
       throw error;
     }

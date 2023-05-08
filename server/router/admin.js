@@ -49,7 +49,7 @@ router.get('/all-borrowed-request', async (req, res) => {
   }
 });
 
-router.put('/all-borrowed-requests', async (req, res) => {
+/* router.put('/all-borrowed-requests', async (req, res) => {
   const { id, ISBN, startDate, endDate } = req.body;
   await services.approveBorrowedRequest(id, ISBN, startDate, endDate, res);
   if (res.status === 500) {
@@ -58,7 +58,7 @@ router.put('/all-borrowed-requests', async (req, res) => {
     await services.setStatusOfBookRequest(ISBN);
     res.json({ massage: 'Approveal completed ' });
   }
-});
+}); */
 router.put(
   '/all-borrowed-requests/:id&:ISBN&:startDate&:endDate',
   async (req, res) => {
@@ -66,16 +66,16 @@ router.put(
     let userLimits = await admin.getUserLimitsByID(id);
     userLimits = userLimits.limited_requests;
     if (userLimits > 0) {
-      await admin.approveBorrowedRequest(id, ISBN, startDate, endDate, res);
+      await services.approveBorrowedRequest(id, ISBN, startDate, endDate, res);
       if (res.status === 500) {
         res.json({ message: 'samething Wrong.' });
       } else if (res.status === 405) {
         res.json({ message: 'samething Wrong.' });
       } else {
         userLimits = userLimits - 1;
-        await admin.updateUserLimits(id, userLimits);
-        await admin.updateStatusInHistory(id, ISBN, 'aproval');
-        await admin.updateDateInHistory(id, ISBN, startDate, endDate);
+        await services.updateUserLimits(id, userLimits);
+        await services.updateDateInHistory(id, ISBN, startDate, endDate);
+        await services.updateStatusInHistory(id, ISBN, 'aproval');
         res.json({ message: 'Approveal completed ' });
       }
     } else {
@@ -106,20 +106,31 @@ router.delete('/delete-book/:ISBN', async (req, res) => {
   }
 });
 
-router.put('/update-book/:ISBN', async (req, res) => {
-  try {
-    const { ISBN } = req.params;
-    const data = req.body;
-    const updatedBook = await services.updateBook(ISBN, data, res);
-    if (updatedBook.affectedRows == 1) {
-      res.json({ message: 'update successfuly', data: updatedBook });
-    } else {
-      res.json({ message: 'bad request' });
+router.put(
+  '/update-book/:ISBN&:title&:description&:author&:rackNumber&:subject',
+  async (req, res) => {
+    try {
+      const { ISBN, title, description, author, rackNumber, subject } =
+        req.params;
+      const data = {
+        ISBN: ISBN,
+        title: title,
+        description: description,
+        author: author,
+        rackNumber: rackNumber,
+        subject: subject,
+      };
+      const updatedBook = await services.updateBook(data, res);
+      if (updatedBook.affectedRows == 1) {
+        res.json({ message: 'update successfully', data: updatedBook });
+      } else {
+        res.json({ message: 'bad request' });
+      }
+    } catch (error) {
+      throw error;
     }
-  } catch (error) {
-    throw error;
   }
-});
+);
 
 router.delete('/reject-user/:id', async (req, res) => {
   const { id } = req.params;

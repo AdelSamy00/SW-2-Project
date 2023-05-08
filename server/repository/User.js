@@ -94,12 +94,14 @@ class User extends BookForUser {
     }
   }
   // Override
-  async updateUserHistory(bookISBN, userID) {
+  async updateUserHistory(bookISBN, userID, bookStartDate, bookEndDate) {
     try {
-      await conn.awaitQuery('update history set ? where ? and ?', [
+      await conn.awaitQuery('update history set ? where ? and ? and ? and ?', [
         { status: 'Returned' },
         { book_ISBN: bookISBN },
         { user_id: userID },
+        { book_startDate: bookStartDate },
+        { book_endDate: bookEndDate },
       ]);
     } catch (error) {
       throw error;
@@ -128,9 +130,14 @@ class User extends BookForUser {
     }
   }
   // Override
-  async returnBook(userID, bookISBN, res) {
+  async returnBook(userID, bookISBN, bookStartDate, bookEndDate, res) {
     try {
-      await this.updateUserHistory(bookISBN, userID);
+      await this.updateUserHistory(
+        bookISBN,
+        userID,
+        bookStartDate,
+        bookEndDate
+      );
       await this.updateBookRequest(bookISBN);
       await this.deleteBookrequest(bookISBN, userID);
       res.status(200);

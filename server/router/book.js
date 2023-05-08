@@ -62,7 +62,6 @@ router.get('/available-Books', async function (req, res) {
       .json({ message: 'Get all books successfully.', data: availableBooks });
   }
 });
-
 router.post('/add-new-book', upload.single('photo'), async function (req, res) {
   try {
     const bookData = req.body;

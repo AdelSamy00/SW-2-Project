@@ -86,20 +86,23 @@ router.get('/currentApproval/:userID', async function (req, res) {
   }
 });
 
-router.put('/returnBook/:id&:ISBN&:limits', async (req, res) => {
-  try {
-    let { id, ISBN, limits } = req.params;
-    await services.returnBook(id, ISBN, res);
-    limits = parseInt(limits) + 1;
-    await services.updateUserLimits(id, limits);
-    if (res.status === 200) {
-      res.status(200).json({ message: 'returned successfully' });
-    } else {
-      res.status(404).json({ message: 'error' });
+router.put(
+  '/returnBook/:id&:ISBN&:limits&:startDate&:endDate',
+  async (req, res) => {
+    try {
+      let { id, ISBN, limits, startDate, endDate } = req.params;
+      await services.returnBook(id, ISBN, startDate, endDate, res);
+      limits = parseInt(limits) + 1;
+      await services.updateUserLimits(id, limits);
+      if (res.status === 200) {
+        res.status(200).json({ message: 'returned successfully' });
+      } else {
+        res.status(404).json({ message: 'error' });
+      }
+    } catch (error) {
+      throw error;
     }
-  } catch (error) {
-    throw error;
   }
-});
+);
 
 module.exports = router;

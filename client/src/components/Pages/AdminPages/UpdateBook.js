@@ -1,40 +1,39 @@
-import React, { useState, useEffect } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import AdminHeader from "../../../shared/Pages/AdminHeader.js";
-import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import AdminHeader from '../../../shared/Pages/AdminHeader.js';
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const UpdateBook = () => {
   const [validated, setValidated] = useState(false);
   const navigate = useNavigate();
   const ISBN = useParams();
   const [values, setValues] = useState({
-    ISBN: "",
-    title: "",
-    author: "",
-    subject: "",
-    rackNumber: "",
-    description: "",
+    ISBN: '',
+    title: '',
+    author: '',
+    subject: '',
+    rackNumber: '',
+    description: '',
   });
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (
-      values.title == "" &&
-      values.description == "" &&
-      values.author == "" &&
-      values.rackNumber == "" &&
-      values.subject == ""
+      values.title != '' &&
+      values.description != '' &&
+      values.author != '' &&
+      values.rackNumber != '' &&
+      values.subject != ''
     ) {
       const res = await axios.put(
-        `http://localhost:4000/admin/update-book/${ISBN.ISBN}`,
-        values
+        `http://localhost:4000/admin/update-book/${ISBN.ISBN}&${values.title}&${values.description}&${values.author}&${values.rackNumber}&${values.subject}`
       );
       if (res.status == 200) {
-        alert("Update Successfuly.");
-        navigate("/admin/book/manage");
+        alert('Update Successfully.');
+        navigate('/admin/book/manage');
       } else {
-        alert("Something Wrong.");
+        alert('Something Wrong.');
       }
     }
 
@@ -52,11 +51,11 @@ const UpdateBook = () => {
         `http://localhost:4000/book/book-by-ISBN/${ISBN}`,
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       );
-      if (res.data.message == "found") {
+      if (res.data.message == 'found') {
         const { ISBN, title, author, subject, rackNumber, description } =
           res.data.data[0];
         setValues({

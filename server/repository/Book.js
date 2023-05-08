@@ -19,7 +19,7 @@ class Book {
       throw error;
     }
   }
-  /*   addNewBook = (data, imgName, res) => {
+  addNewBook = (data, imgName, res) => {
     imgName = imgName.replaceAll('\\', '/');
     try {
       conn.query('insert into books set ?', {
@@ -36,7 +36,7 @@ class Book {
       res.status(204).json({ messege: 'failed to save the book' });
       throw error;
     }
-  }; */
+  };
 
   async getBookStatus(ISBN) {
     try {

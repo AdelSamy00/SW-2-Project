@@ -29,6 +29,14 @@ class AdminServices {
     }
   }
 
+  async updateUserLimits(id, limit) {
+    try {
+      this.admin.updateUserLimits(id, limit);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getAllBorrowedRequest() {
     try {
       const allRequest = await this.admin.getAllBorrowedRequest();
@@ -77,6 +85,14 @@ class AdminServices {
     }
   }
 
+  async updateDateInHistory(id, ISBN, startDate, endDate) {
+    try {
+      await this.admin.updateDateInHistory(id, ISBN, startDate, endDate);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async deleteBookByISBN(ISBN) {
     try {
       const DeletedBook = await this.admin.deleteBookByISBN(ISBN);
@@ -85,10 +101,17 @@ class AdminServices {
       throw error;
     }
   }
-
-  async updateBook(ISBN, data, res) {
+  async addNewBook(bookData, filePath, res) {
     try {
-      const updatedBook = await this.admin.updateBook(ISBN, data, res);
+      await this.admin.addNewBook(bookData, filePath, res);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateBook(data, res) {
+    try {
+      const updatedBook = await this.admin.updateBook(data, res);
       return updatedBook;
     } catch (error) {
       throw error;

@@ -42,7 +42,7 @@ const ManageBorrowedReq = () => {
         `http://localhost:4000/admin/all-borrowed-requests/${userID}&${ISBN}&${startDate}&${endDate}`
       );
       if (res.status == 200) {
-        alert('Approval Successfuly.');
+        alert('Approval Successfully.');
         navigate('/admin/book/manage');
       } else {
         alert('Something Wrong.');
