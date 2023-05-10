@@ -1,6 +1,25 @@
 const conn = require('../config/connection');
 
 class Book {
+  constructor(
+    ISBN,
+    title,
+    author,
+    subject,
+    rackNumber,
+    isBorrowed,
+    img_url,
+    description
+  ) {
+    this.ISBN = ISBN;
+    this.title = title;
+    this.author = author;
+    this.subject = subject;
+    this.rackNumber = rackNumber;
+    this.isBorrowed = isBorrowed;
+    this.img_url = img_url;
+    this.description = description;
+  }
   async getAllBooks() {
     try {
       const books = await conn.awaitQuery('select * from books');

@@ -1,13 +1,16 @@
 const router = require('express').Router();
 const Book = require('../repository/Book');
-const User = require('../repository/User');
+const History = require('../repository/History');
+const NormalUser = require('../repository/NormalUser');
+//const User = require('../repository/User');
 
-const UserServices = require('../services/userServices');
+const UserServices = require('../services/UserServices');
 
-const user = new User();
+const user = new NormalUser();
 const book = new Book();
+const history = new History();
 // depandency injection ---- constructor
-const services = new UserServices(user, book);
+const services = new UserServices(user, book, history);
 
 router.post('/signup', async function (req, res) {
   const data = req.body;
@@ -22,7 +25,7 @@ router.post('/signup', async function (req, res) {
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  const userData = await services.userLogin(email, password);
+  const userData = await services.userLogin(email, password[0]);
   if (userData.length == 0) {
     res.status(404).json({ message: 'please check you email or pasword.' });
   } else if (userData[0].status != 1) {
@@ -94,7 +97,7 @@ router.put(
       await services.returnBook(id, ISBN, startDate, endDate, res);
       limits = parseInt(limits) + 1;
       await services.updateUserLimits(id, limits);
-      if (res.status === 200) {
+      if (res.statusCode == 200) {
         res.status(200).json({ message: 'returned successfully' });
       } else {
         res.status(404).json({ message: 'error' });

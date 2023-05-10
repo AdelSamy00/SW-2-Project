@@ -1,9 +1,10 @@
 const { v4: uuidv4, v4 } = require('uuid');
 
 class UserServices {
-  constructor(user, book) {
+  constructor(user, book, history) {
     this.user = user;
     this.book = book;
+    this.history = history;
   }
 
   async getUserByEmail(email) {
@@ -61,7 +62,7 @@ class UserServices {
 
   async getHistory(userID) {
     try {
-      const userHistory = await this.user.getHistory(userID);
+      const userHistory = await this.history.getHistory(userID);
       return userHistory;
     } catch (error) {
       throw error;

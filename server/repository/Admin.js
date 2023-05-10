@@ -2,8 +2,9 @@ const router = require('express').Router();
 const conn = require('../config/connection');
 const Book = require('./Book');
 const BookForAdmin = require('./BookForAdmin');
+const User = require('./User');
 
-class Admin extends BookForAdmin {
+class Admin extends (User, BookForAdmin) {
   async getAllUsers() {
     try {
       const AllUsers = await conn.awaitQuery('select * from users');
@@ -87,17 +88,6 @@ class Admin extends BookForAdmin {
     }
   }
 
-  /* async getBookStatus(ISBN) {
-    try {
-      const status = await conn.awaitQuery(
-        'select isBorrowed from books where ?',
-        { ISBN: ISBN }
-      );
-      return status;
-    } catch (error) {
-      throw error;
-    }
-  } */
   //Override
   async addNewBook(data, imgName, res) {
     imgName = imgName.replaceAll('\\', '/');

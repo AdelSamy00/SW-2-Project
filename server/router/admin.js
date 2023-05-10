@@ -48,17 +48,6 @@ router.get('/all-borrowed-request', async (req, res) => {
       .json({ message: 'there found some requests', data: allRequest });
   }
 });
-
-/* router.put('/all-borrowed-requests', async (req, res) => {
-  const { id, ISBN, startDate, endDate } = req.body;
-  await services.approveBorrowedRequest(id, ISBN, startDate, endDate, res);
-  if (res.status === 500) {
-    res.json({ message: 'samething Wrong.' });
-  } else {
-    await services.setStatusOfBookRequest(ISBN);
-    res.json({ massage: 'Approveal completed ' });
-  }
-}); */
 router.put(
   '/all-borrowed-requests/:id&:ISBN&:startDate&:endDate',
   async (req, res) => {
